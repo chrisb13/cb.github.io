@@ -3,11 +3,16 @@
 - title: About
   url: /about/
 
-- title: Sample Posts
-  url: /posts/
+- title: Publications
+  url: /publications/
 
-- title: Theme Setup
-  url: /theme-setup/
+- title: Python
+  url: /python/
 
-- title: Made Mistakes
-  url: http://mademistakes.com
+- title: Southern Surveyor 
+  url: /southern_surveyor/
+
+- title: Resources
+  url: /resources/
+
+

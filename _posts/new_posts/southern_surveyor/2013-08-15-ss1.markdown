@@ -1,0 +1,19 @@
+---
+author: admin
+comments: false
+date: 2013-08-15 17:00:42+00:00
+layout: post
+slug: ss1
+title: Southern Surveyor East Australia Current voyage begins!
+wordpress_id: 21
+categories:
+- Southern_Surveyor
+---
+
+I'm off to learn what oceanographers in the real world do! I'll be helping a team of scientists take observations, on a boat! We'll be pulling out five [moorings](http://en.wikipedia.org/wiki/Mooring_(oceanography)) that have been monitoring the East Australia Current and doing seventeen [CTD](http://en.wikipedia.org/wiki/Conductivity,_temperature,_depth) profiles on the way ([particulars](http://christopherbull.com.au/blog/wp-content/uploads/2013/09/MNF-SS2013_v05_PLAN.pdf)).
+
+[caption id="attachment_238" align="aligncenter" width="300"][![Australia’s Marine National Facility research vessel the Southern Surveyor. Photo credit: Stephanie Downes (ANU)](http://christopherbull.com.au/blog/wp-content/uploads/2013/08/SSboat_stephanie_downes_ANU-300x225.jpg)](http://christopherbull.com.au/blog/wp-content/uploads/2013/08/SSboat_stephanie_downes_ANU.jpg) Australia’s Marine National Facility research vessel the Southern Surveyor. Photo: [Stephanie Downes (ANU)](http://people.rses.anu.edu.au/downes_s/)[/caption]
+
+Wondering where we are? What the ob's are like? Is Chris being swallowed by house sized waves? You can [follow the boat here](http://www.marine.csiro.au/nationalfacility/research-vessel/southern-surveyor/vessel-data.htm).
+
+Curious if I've seen Marlin, Dory, Crush and Squirt? (_Finding Nemo_). Wondering how much weight I'm losing in spew? I'll be sending live tweets from the ship; keep an eye on [my twitter feed](https://twitter.com/ChrisBullOceanO).

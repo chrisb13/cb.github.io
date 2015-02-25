@@ -1,9 +1,9 @@
 ---
 layout: home
-excerpt: "A minimal Jekyll theme for your blog by designer Michael Rose."
+excerpt: "The personal homepage of Christopher Bull Oceanographer"
 tags: [Jekyll, theme, responsive, blog, template]
 image:
   feature: sample-image-1.jpg
-  credit: WeGraphics
-  creditlink: http://wegraphics.net/downloads/free-ultimate-blurred-background-pack/
+  credit: Nuggets, Freycinet National Park (Tasmania, Australia)
+  creditlink: http://en.wikipedia.org/wiki/The_Nuggets
 ---

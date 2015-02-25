@@ -1,6 +1,6 @@
 # Site wide configuration
 
-title:            Site Title
+title:            Christopher Bull
 locale:           en_US
 url:              
 
@@ -26,12 +26,12 @@ kramdown:
 
 # Site owner
 owner:
-  name: Your Name
-  avatar: bio-photo.jpg
-  bio: "Describe your self."
-  email: 
+  name: Christopher Bull
+  avatar: bio-photo.jpeg
+  bio: "Aspiring oceanographer. PhD candidate (UNSW). Big data python enthusiast. Outdoor adventurer."
+  email: 'christopher.y.bull@unsw.edu.au'
   disqus-shortname: 
-  twitter: #username
+  twitter: ChrisBullOceanO 
   facebook: #username
   google:
     plus: #username
