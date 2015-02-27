@@ -3,14 +3,14 @@
 - title: About
   url: /about/
 
-- title: Publications
-  url: /publications/
+#- title: Publications
+  #url: /publications/
 
 - title: Python
   url: /python/
 
-- title: Southern Surveyor 
-  url: /southern_surveyor/
+#- title: Southern Surveyor 
+#  url: /southern_surveyor/
 
 - title: Resources
   url: /resources/
