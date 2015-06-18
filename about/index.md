@@ -9,11 +9,6 @@ title: About Me
 wordpress_id: 57
 ---
 
-# Christopher Bull
-
-
-## [![IMG_1690-2](http://christopherbull.com.au/blog/wp-content/uploads/2013/07/IMG_1690-2-300x200.jpg)](http://christopherbull.com.au/blog/wp-content/uploads/2013/07/IMG_1690-2.jpg)
-
 ## I am ...
 A PhD candidate studying physical oceanography at the [University of New South Wales](http://www.unsw.edu.au).
 
@@ -43,5 +38,7 @@ Sydney, Australia
 [ARC Centre of Excellence for Climate System Science](http://www.climatescience.org.au/) ([my](http://www.climatescience.org.au/staff/profile/cbull) page)
 
 [Australian Meteorological and Oceanographic Society](http://www.amos.org.au/)
+
+<a href="/images/about_me_picture.jpg"><img src="/images/about_me_picture.jpg"></a>
 
 Photo credit: The profile photo is from Bagan, Myanmar.

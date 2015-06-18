@@ -1,6 +1,13 @@
-{% if page.author %}
-  {% assign author = site.data.authors[page.author] %}{% else %}{% assign author = site.owner %}
-{% endif %}
+<div class="article-author-side">    
+
+<!--Chris has hardcoded the site owner here to be the author of every page!-->
+<!--{% if page.author %}-->
+  <!--{% assign author = site.data.authors[page.author] %}{% else %}{% assign author = site.owner %}-->
+<!--{% endif %}-->
+
+{% assign author = site.owner %}
+
+
 
 <div itemscope itemtype="http://schema.org/Person">
 
@@ -30,4 +37,5 @@
   {% if author.soundcloud %}<a href="http://soundcloud.com/{{ author.soundcloud }}" class="author-social" target="_blank"><i class="fa fa-fw fa-soundcloud"></i> Soundcloud</a>{% endif %}
   {% if author.weibo %}<a href="http://www.weibo.com/{{ author.weibo }}" class="author-social" target="_blank"><i class="fa fa-fw fa-weibo"></i> Weibo</a>{% endif %}
   {% if author.flickr %}<a href="http://www.flickr.com/{{ author.flickr }}" class="author-social" target="_blank"><i class="fa fa-fw fa-flickr"></i> Flickr</a>{% endif %}
+</div>
 </div>
