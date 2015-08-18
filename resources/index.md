@@ -22,7 +22,7 @@ There are loads of python blogs on the internet. The aspiration of this blog is 
 	
   * [netcdf4-python](https://code.google.com/p/netcdf4-python/) is my choice of a python library/interface for [netCDF](http://www.unidata.ucar.edu/software/netcdf/). There's a list of other Python netCDF paraphernalia [here](http://www.unidata.ucar.edu/software/netcdf/software.html#Python) and [here](http://pyaos.johnny-lin.com/?page_id=20).
 
-  * [Pip](https://pypi.python.org/pypi/pip) or Conda and [IPython](http://ipython.org/) will make your python life a million times more pleasant. Use it. Speaking of pleasant, [make IPython use Vi editing](http://stackoverflow.com/questions/10394302/how-do-i-use-vi-keys-in-ipython-under-nix) and automatic indenting (in particular [where it turns tabs into spaces](http://wiki.python.org/moin/Vim)).
+  * [Pip](https://pypi.python.org/pypi/pip) or [Conda](http://conda.pydata.org/docs/) and [IPython](http://ipython.org/) will make your python life a million times more pleasant. Use it. Speaking of pleasant, [make IPython use Vi editing](http://stackoverflow.com/questions/10394302/how-do-i-use-vi-keys-in-ipython-under-nix) and automatic indenting (in particular [where it turns tabs into spaces](http://wiki.python.org/moin/Vim)).
 
   * Want to just start hacking from examples? [Check out these gems](http://oceanpython.org/) and these [gems](http://earthpy.org/).
 	

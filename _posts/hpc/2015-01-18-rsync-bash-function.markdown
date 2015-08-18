@@ -9,10 +9,11 @@ categories:
 - hpc
 ---
 
-My life consists of three problems:
-[1] I work on many different machines.
-[2] I spend a lot of time moving files around.
-[3] I can never remember the right rsync flags and my fingers are lazy.
+My life consists of three problems...
+
+1. I work on many different machines.
+1. I spend a lot of time moving files around.
+1. I can never remember the right rsync flags and my fingers are lazy.
 
 The third problem means I never want to deal with the first two.. Sound familiar? 
 
@@ -76,7 +77,7 @@ function servername_push()
 }
 {% endhighlight %}
 
-So, if you put these in your .bashrc with your relevant server details you should be good to go! Feel free to change the switches if you prefer something else, do get in touch if you improve these, it's impractical to currently pass include/exclude statements at present for instance...
+So, if you put these in your [.bashrc](http://superuser.com/questions/49289/what-is-the-bashrc-file) with your relevant server details you should be good to go! Feel free to change the switches if you prefer something else, do get in touch if you improve these, it's impractical to currently pass include/exclude statements at present for instance...
 
-Finally, life is a lot more smooth if you're using ssh keys.
+Finally, life is a lot more smooth if you're using [ssh keys](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2).
 

@@ -38,4 +38,4 @@ function vim_servername()
 }
 {% endhighlight %}
 
-So, just put these in your .bashrc with your relevant server details and you should be good to go! Best to be using ssh keys, that way you're not typing in your password everytime you save..
+So, just put these in your [.bashrc](http://superuser.com/questions/49289/what-is-the-bashrc-file) with your relevant server details and you should be good to go! Best to be using [ssh keys](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2), that way you're not typing in your password everytime you save..
