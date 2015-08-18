@@ -6,6 +6,9 @@
 #- title: Publications
   #url: /publications/
 
+- title: hpc
+  url: /hpc/
+
 - title: Python
   url: /python/
 
