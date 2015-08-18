@@ -79,5 +79,5 @@ function servername_push()
 
 So, if you put these in your [.bashrc](http://superuser.com/questions/49289/what-is-the-bashrc-file) with your relevant server details you should be good to go! Feel free to change the switches if you prefer something else, do get in touch if you improve these, it's impractical to currently pass include/exclude statements at present for instance...
 
-Finally, life is a lot more smooth if you're using [ssh keys](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2).
+Also, life is a lot more smooth if you're using [ssh keys](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2).
 
