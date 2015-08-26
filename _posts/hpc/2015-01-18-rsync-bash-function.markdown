@@ -9,13 +9,12 @@ categories:
 - hpc
 ---
 
-My life consists of three problems...
+My life consists of two problems...
 
-1. I work on many different machines.
-1. I spend a lot of time moving files around.
+1. I work on many different machines and the files I want are invariably on the wrong machine.
 1. I can never remember the right rsync flags for the different machines I use and my fingers are lazy.
 
-The third problem means I never want to deal with the first two.. Sound familiar? 
+The second problem means I never want to deal with the first two.. Sound familiar? 
 
 Here's some bash functions to help you push and pull files from a remote location. 
 
