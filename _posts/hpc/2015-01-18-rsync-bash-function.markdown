@@ -13,7 +13,7 @@ My life consists of three problems...
 
 1. I work on many different machines.
 1. I spend a lot of time moving files around.
-1. I can never remember the right rsync flags and my fingers are lazy.
+1. I can never remember the right rsync flags for the different machines I use and my fingers are lazy.
 
 The third problem means I never want to deal with the first two.. Sound familiar? 
 
@@ -25,12 +25,12 @@ We have one bash function for pulling files....
 function servername_pull()
 {
     if [[ ( $# -eq 0 ) || ( $1 == "--help" ) || ( $1 == "-h" ) ]] ; then
-        echo "Usage:   servername_pull [path_from] [path_to]." 
+        echo "Usage:   servername_pull PATH_FROM PATH_TO." 
         echo "Purpose: rsync function to pull files from servername." 
         echo "       " 
         echo "Mandatory arguments: " 
-        echo "path_from: Path on server to Rsync from" 
-        echo "path_to:   Path on local to Rsync to" 
+        echo "PATH_FROM: Path on server to Rsync from" 
+        echo "PATH_TO:   Path on local to Rsync to" 
         echo "       " 
         echo "Example." 
         echo "This:" 
@@ -51,12 +51,12 @@ And another (slightly more complicated) bash function for pushing files....
 function servername_push()
 {
     if [[ ( $# -eq 0 ) || ( $1 == "--help" ) || ( $1 == "-h" ) ]] ; then
-        echo "Usage:   servername_push [path_from] [path_to]." 
+        echo "Usage:   servername_push PATH_FROM PATH TO." 
         echo "Purpose: rsync function to push files to servername." 
         echo "       " 
         echo "Mandatory arguments: " 
-        echo "path_from: Path on server to Rsync from" 
-        echo "path_to:   Path on local to Rsync to" 
+        echo "PATH_FROM: Path on local to Rsync from" 
+        echo "PATH_TO:   Path on server to Rsync to" 
         echo "       " 
         echo "Example." 
         echo "This:" 
