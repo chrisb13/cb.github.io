@@ -9,9 +9,9 @@ categories:
 - python
 ---
 
-I recently discovered [docopt](https://github.com/docopt/docopt), this super neat command line parser. I've used sys.argv and the argparse module but they've always felt too limited or overly complicated (respectively). What's great about docopt is that understands what to do based on the POSIX-style doc string you write! This has two advantages...
+I recently discovered [docopt](https://github.com/docopt/docopt), this super neat command line parser. I've used sys.argv and the argparse module but they've always felt too limited or overly complicated (respectively). What's great about docopt is that it understands what to do based on the POSIX-style doc string you write! This has two advantages...
 
-1. You likely have used enough *nix command-line tools to have a sense of what your doc string should look like (if you do get lost [the docs](https://github.com/docopt/docopt) are great).
+1. You've likely used enough *nix command-line tools to have a sense of what your doc string should look like (if you do get lost [the docs](https://github.com/docopt/docopt) are great).
 1. It forces you to write documentation!
 
 There's a [video](http://docopt.org/) here if you want a demo. Whilst it's not part of core python, one of the neat things is that it is fully self-contained within a single file. Thus, you can 'install' it with: 
