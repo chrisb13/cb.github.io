@@ -19,7 +19,7 @@ The second problem means I never want to deal with the first two.. Sound familia
 Here's some bash functions to help you push and pull files from a remote location. 
 
 We have one bash function for pulling files....
-
+{% gist 7ea4e9620cbce4a80bfd %}
 {% highlight bash %}
 function servername_pull()
 {
