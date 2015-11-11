@@ -17,6 +17,12 @@ The following ncdump command provides a useful overview. The mapping grabs the c
 nnoremap <leader>nc :vnew<Bar>0r!ncdump -c <C-R>+<CR>
 {% endhighlight %}
 
+What about if you want to have a quick look at a plot of one of the variables? Works with ncview too!
+
+{% highlight vim %}
+nnoremap <leader>ncv :exec '!ncview <C-R>+'<CR>
+{% endhighlight %}
+
 Speaking of working with netCDF files, here's a handy [snippet](https://github.com/sirver/ultisnips) for the python library...
 
 {% highlight python %}
