@@ -1,6 +1,6 @@
 ---
 author: chris_bull
-comments: false
+comments: true 
 date: 2015-08-18 00:30:00+00:00
 layout: post
 slug: bash-function-rsync
@@ -19,64 +19,13 @@ The second problem means I never want to deal with the first two.. Sound familia
 Here's some bash functions to help you push and pull files from a remote location. 
 
 We have one bash function for pulling files....
-
-{% highlight bash %}
-function servername_pull()
-{
-    if [[ ( $# -eq 0 ) || ( $1 == "--help" ) || ( $1 == "-h" ) ]] ; then
-        echo "Usage:   servername_pull PATH_FROM PATH_TO." 
-        echo "Purpose: rsync function to pull files from servername." 
-        echo "       " 
-        echo "Mandatory arguments: " 
-        echo "PATH_FROM: Path on server to Rsync from" 
-        echo "PATH_TO:   Path on local to Rsync to" 
-        echo "       " 
-        echo "Example." 
-        echo "This:" 
-        echo "servername_pull /home/server/path/*.py ./temp"
-        echo "       " 
-        echo "Becomes:" 
-        echo "rsync -avz --progress server_username@server.address.edu.au:/home/server/path/*.py ./temp"
-
-        return 1
-    fi
-    rsync -avz --progress server_username@server.address.edu.au:$* 
-}
-{% endhighlight %}
+{% gist 7ea4e9620cbce4a80bfd %}
 
 And another (slightly more complicated) bash function for pushing files....
 
-{% highlight bash %}
-function servername_push()
-{
-    if [[ ( $# -eq 0 ) || ( $1 == "--help" ) || ( $1 == "-h" ) ]] ; then
-        echo "Usage:   servername_push PATH_FROM PATH TO." 
-        echo "Purpose: rsync function to push files to servername." 
-        echo "       " 
-        echo "Mandatory arguments: " 
-        echo "PATH_FROM: Path on local to Rsync from" 
-        echo "PATH_TO:   Path on server to Rsync to" 
-        echo "       " 
-        echo "Example." 
-        echo "This:" 
-        echo "servername_push ./temp/* /home/server/path/"
-        echo "       " 
-        echo "Becomes:" 
-        echo "rsync -avz --progress ./temp/* server_username@server.address.edu.au:/home/server/path/"
+{% gist 432eade90ec68629d03a %}
 
-        return 1
-    fi
-    #grabs last passed argument..
-    for last; do true; done
-
-    #grabs all arguments but the last one...
-    #echo ${@:1:$(($#-1))}
-
-    rsync -avz --progress ${@:1:$(($#-1))} server_username@server.address.edu.au:$last
-}
-{% endhighlight %}
-
-So, if you put these in your [.bashrc](http://superuser.com/questions/49289/what-is-the-bashrc-file) with your relevant server details you should be good to go! Feel free to change the switches if you prefer something else, do get in touch if you improve these, it's impractical to currently pass include/exclude statements at present for instance...
+So, if you put these in your [.bashrc](http://superuser.com/questions/49289/what-is-the-bashrc-file) with your relevant server details you should be good to go! Feel free to change the switches if you prefer something else, do get in touch if you improve these, it's impractical to currently pass include/exclude statements at present for instance... The above are [GitHub gists](https://help.github.com/articles/about-gists/), feel free to comment/fork/pull!
 
 Also, life is a lot more smooth if you're using [ssh keys](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2).
 

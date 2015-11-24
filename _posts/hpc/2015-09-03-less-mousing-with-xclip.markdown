@@ -1,6 +1,6 @@
 ---
 author: chris_bull
-comments: false
+comments: true
 date: 2015-09-05 00:30:00+00:00
 layout: post
 slug: bash-function-clipit

@@ -1,6 +1,6 @@
 ---
 author: chris_bull
-comments: false
+comments: true
 date: 2015-01-01 00:30:00+00:00
 layout: post
 slug: vim-netrw

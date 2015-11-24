@@ -1,6 +1,6 @@
 ---
 author: chris_bull
-comments: false
+comments: true 
 date: 2014-01-08 00:30:00+00:00
 layout: post
 slug: gotcha-in-pandas-using-hdfstore-frame_tables
