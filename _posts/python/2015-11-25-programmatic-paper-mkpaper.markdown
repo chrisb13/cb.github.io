@@ -9,6 +9,9 @@ categories:
 - python
 ---
 
+MkPaper creates a figure document in 2 + n lines of code, where n is the number of figures you have! 
+{: .notice}
+
 Have you ever wished a machine would write your paper for you? 
 
 Wish no more, the future is here!* I've created a Python package that will compile a LaTeX or word document of figures. Basically, you feed the package a path to a figure and a caption and then it will create either:
@@ -18,7 +21,7 @@ Wish no more, the future is here!* I've created a Python package that will compi
 
 *with those figures and captions inserted*! I've tried to make it as simple and painless to install as possible (just clone the repo'); dependencies are kept to a minimum, specifically:
 
-1. python 2.7
+1. python 2.x
 1. pdflatex (optional)
 1. python-docx (optional)
 
