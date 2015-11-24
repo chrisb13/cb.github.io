@@ -9,7 +9,7 @@ categories:
 - python
 ---
 
-MkPaper creates a figure document in 2 + n lines of code, where n is the number of figures you have! 
+MkPaper creates a figure document in 3 + n lines of code, where n is the number of figures you have! 
 {: .notice}
 
 Have you ever wished a machine would write your paper for you? 
