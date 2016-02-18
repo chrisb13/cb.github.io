@@ -1,15 +1,11 @@
 # Site navigation links
-
-- title: About
-  url: /about/
-
-#- title: Publications
-  #url: /publications/
+- title: publications
+  url: /publications/
 
 - title: hpc
   url: /hpc/
 
-- title: Python
+- title: python
   url: /python/
 
 - title: code
@@ -18,7 +14,9 @@
 #- title: Southern Surveyor 
 #  url: /southern_surveyor/
 
-- title: Resources
+- title: resources
   url: /resources/
 
+- title: about
+  url: /about/
 
