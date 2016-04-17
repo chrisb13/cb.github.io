@@ -10,7 +10,7 @@ wordpress_id: 180
 
 There are loads of python blogs on the internet. The aspiration of this blog is to provide useful tips on using Python for data analysis for climate science. To start, here are some Python resources I have found useful.
 	
-  * Johnny Lin's book [_A Hands-On Introduction to Using Python in the Atmospheric and Oceanic Sciences_](http://www.johnny-lin.com/pyintro/) is a friendly introduction. He also runs a Python climate science user [mailing list](http://pyaos.johnny-lin.com/) and [has a list of climate science python tutorials](http://pyaos.johnny-lin.com/?page_id=217).
+  * Johnny Lin's book [_A Hands-On Introduction to Using Python in the Atmospheric and Oceanic Sciences_](http://www.johnny-lin.com/pyintro/) is a friendly introduction. He also runs a Python climate science user [mailing list](http://pyaos.johnny-lin.com/) and [has a list of climate science python tutorials](http://pyaos.johnny-lin.com/?page_id=217). More recently, there's this book: [Python Programming and Visualization for Scientists](http://www.sundogpublishing.com/shop/python-programming-and-visualization-for-scientists-alex-decaria/).
 
   * Wes McKinney's book [Python for Data Analysis](http://shop.oreilly.com/product/0636920023784.do) is another good primer with chapters devoted to Numpy, Pandas and matplotlib. Wes McKinney has a finance background and is the original author of the Pandas library, as a result, examples from the book are of less interest to climate scientists.
 	
@@ -20,11 +20,13 @@ There are loads of python blogs on the internet. The aspiration of this blog is 
 
   * The 'ARC Center of Excellence for Climate System Science' has a [code repository on github](https://github.com/coecms/climatescripts). The repository includes Python scripts. The idea is to provide a common space where all the [CCRC](http://www.ccrc.unsw.edu.au/)/[ARC CoECSS](http://www.climatescience.org.au/) staff/students share functions, scripts and programs that might be useful for people working on climate science problems.
 	
-  * [netcdf4-python](https://code.google.com/p/netcdf4-python/) is my choice of a python library/interface for [netCDF](http://www.unidata.ucar.edu/software/netcdf/). There's a list of other Python netCDF paraphernalia [here](http://www.unidata.ucar.edu/software/netcdf/software.html#Python) and [here](http://pyaos.johnny-lin.com/?page_id=20).
+  * [netcdf4-python](https://code.google.com/p/netcdf4-python/) is now the standard python interface [netCDF](http://www.unidata.ucar.edu/software/netcdf/). There's a list of other Python netCDF paraphernalia [here](http://www.unidata.ucar.edu/software/netcdf/software.html#Python) and [here](http://pyaos.johnny-lin.com/?page_id=20).
 
   * [Pip](https://pypi.python.org/pypi/pip) or [Conda](http://conda.pydata.org/docs/) and [IPython](http://ipython.org/) will make your python life a million times more pleasant. Use it. Speaking of pleasant, [make IPython use Vi editing](http://stackoverflow.com/questions/10394302/how-do-i-use-vi-keys-in-ipython-under-nix) and automatic indenting (in particular [where it turns tabs into spaces](http://wiki.python.org/moin/Vim)).
 
-  * Want to just start hacking from examples? [Check out these gems](http://oceanpython.org/) and these [gems](http://earthpy.org/).
+  * Want to just start hacking from examples? [Check out these gems](http://earthpy.org/) and these [gems](http://oceanpython.org/).
+
+  * Need some [great practical tips](http://docs.python-guide.org/en/latest/) on best practice?
 	
   * [Pdb](http://docs.python.org/2/library/pdb.html) is a handy built-in debugger. There's a quick tour [here](http://www.youtube.com/watch?v=bZZTeKPRSLQ).
 
