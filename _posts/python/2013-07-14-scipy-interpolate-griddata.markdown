@@ -7,7 +7,7 @@ slug: scipy-interpolate-griddata
 title: Scipy.interpolate.griddata regridding data.
 wordpress_id: 108
 categories:
-- Python
+- python
 tags:
 - interpolate
 - meshgrid

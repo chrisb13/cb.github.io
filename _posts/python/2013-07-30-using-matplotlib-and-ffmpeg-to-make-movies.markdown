@@ -7,7 +7,7 @@ slug: using-matplotlib-and-ffmpeg-to-make-movies
 title: Bug with Matplotlib when making movies.
 wordpress_id: 165
 categories:
-- Python
+- python
 tags:
 - bug
 - ffmpeg
