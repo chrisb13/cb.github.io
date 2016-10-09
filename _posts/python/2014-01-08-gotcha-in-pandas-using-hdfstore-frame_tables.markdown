@@ -7,7 +7,7 @@ slug: gotcha-in-pandas-using-hdfstore-frame_tables
 title: Gotcha in Pandas using HDFStore frame_tables
 wordpress_id: 628
 categories:
-- Python
+- python
 ---
 
 Recently, I changed from using regular [pytable HDFStores to fancy frame_tables](http://pandas.pydata.org/pandas-docs/dev/io.html#io-hdf5). The move was mostly for the better as my HDFStores were big. Of course, my old code modifying the dataframes broke because of this little bit of syntax...
