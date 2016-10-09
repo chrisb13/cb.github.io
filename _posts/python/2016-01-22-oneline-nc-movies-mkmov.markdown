@@ -9,6 +9,8 @@ categories:
 - python
 ---
 
+**Update 10.10.2016**. MkMov 0.4 now supports a bunch of other outputs, see [usage](http://christopherbull.com.au/mkmov/usage.html) for details.
+
 MkMov is a Python package that creates a movie from a netCDF file with a single line, interface is command line (no python knowledge needed)! 
 {: .notice}
 
@@ -24,7 +26,7 @@ Examples tell a thousand words, [here's a movie (AVISO global allsat madt, outpu
 Created with a single line command, namely
 
 {% highlight bash %}
-python mkmov.py adt --lmask -214748 --cmap Set3 -o /srv/ccrc/data42/z3457920/mkmovmovies4/AVISOdt_global_allsat_madt_Set3.mov /srv/ccrc/data42/z3457920/RawData/AVISO/RawData/dt_global_allsat_madt/ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/h/*/*.nc &>  /srv/ccrc/data42/z3457920/mkmovmovies4/15.log &
+python mkmov.py 2d adt --lmask -214748 --cmap Set3 -o /srv/ccrc/data42/z3457920/mkmovmovies4/AVISOdt_global_allsat_madt_Set3.mov /srv/ccrc/data42/z3457920/RawData/AVISO/RawData/dt_global_allsat_madt/ftp.aviso.altimetry.fr/global/delayed-time/grids/madt/all-sat-merged/h/*/*.nc &>  /srv/ccrc/data42/z3457920/mkmovmovies4/15.log &
 {% endhighlight %}
 
 More examples with their respective run commands [here](http://christopherbull.com.au/mkmov/examples.html). Official [docs are here](http://www.christopherbull.com.au/mkmov). [Contributions](http://www.christopherbull.com.au/mkmov/contributing.html) are most welcome.
@@ -42,3 +44,4 @@ Cons:
 
 1. slow in comparison to ncview 
 1. need to install dependencies
+
