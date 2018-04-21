@@ -25,6 +25,8 @@ Chris is interested in ocean ice-shelf interactions and Australia's boundary cur
 
 [Twitter](https://twitter.com/ChrisBullOceanO) 
 
+[AMSI 2017 media interview](https://www.climatescience.org.au/content/1202-chris-bull-interview-amsi-winter-school-2017) 
+
 ## Contact
 e: chbull@bas.ac.uk
 
