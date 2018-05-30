@@ -1,0 +1,51 @@
+---
+author: chris_bull
+comments: true
+date: 2018-05-18 08:30:00+00:00
+layout: post
+slug: nemo-wed12-01
+title: Building WED12 (Step 3)
+categories:
+- nemo
+---
+Starting the WED12 configuration (compiling NEMO and NEMO's maketools)
+{: .notice}
+
+Suggested reading:
+
+* [ARCHER fork of Nicolas Jourdain GitHub repository for WED12 configuration, this guide is based on these notes](https://github.com/chrisb13/BUILD_CONFIG_NEMO)
+
+## Create WED12 configuration 
+
+First of all, choose a configuration name, e.g. WED12, AMU12, PERIANT025, etc, and save it, i.e.: `export CONFIG='WED12'`
+
+Compile for a new configuration, e.g. the WED12 configuration (you can have several ones)
+{% highlight bash %}
+cd MY_NEMO/NEMOGCM/CONFIG
+echo "$CONFIG OPA_SRC LIM_SRC_3" >> cfg.txt  ## here for OPA+LIM3 (see cfg.txt for other options)
+mkdir $CONFIG
+{% endhighlight %}
+
+Choose fppkeys prior to compilation (see NEMO documentations or examples in existing configurations, e.g. `MY_NEMO/NEMOGCM/CONFIG/AMM12/cpp_AMM12.fcm`), and compile, e.g. :
+
+{% highlight bash %}
+cd /NEMOGCM/CONFIG
+echo " bld::tool::fppkeys key_dynldf_c2d key_dynspg_flt key_iomput  key_ldfslp  key_tide key_lim3 key_mpp_mpi key_mpp_rep key_nosignedzero key_trabbl key_traldf_c2d key_vvl key_xios2  key_zdfddm key_zdftke key_zdftmx " > ${CONFIG}/cpp_${CONFIG}.fcm
+time ./makenemo -n $CONFIG -m XC_ARCHER_INTEL -j 8 &> compile.log &
+tail -f compile.log            ## to follow the compilation
+ls -al ${CONFIG}/BLD/bin/nemo.exe  ## to check that everything went fine
+{% endhighlight %}
+> NB: if you recompile, it is recommended to remove these directories: `rm -rf ${CONFIG}/WORK ${CONFIG}/BLD;cd ..`
+
+## NEMO maketools
+
+Compile REBUILD_NEMO (used to recombine outputs at the end of the jobs):
+
+{% highlight bash %}
+cd TOOLS
+./maketools -h  ## use same architecture as for NEMO's compilation (e.g. XC_ARCHER_INTEL)
+./maketools -m XC_ARCHER_INTEL -n REBUILD_NEMO
+ls -al REBUILD_NEMO/BLD/bin/  ## to check that everything went fine
+cd ..
+{% endhighlight %}
+

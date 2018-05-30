@@ -1,0 +1,53 @@
+---
+author: chris_bull
+comments: true
+date: 2018-05-21 08:30:00+00:00
+layout: post
+slug: nemo-wed12-01
+title: Pre-processing tools for WED12 (Step 4)
+categories:
+- nemo
+---
+Building the pre-processing tools
+{: .notice}
+
+Suggested reading:
+
+* [ARCHER fork of Nicolas Jourdain GitHub repository for WED12 configuration, this guide is almost verbatim based on these notes](https://github.com/chrisb13/BUILD_CONFIG_NEMO)
+
+## Prepare the pre-processing tools (GSW TOOLBOX and Nico's regional tools):
+
+First you may need the TEOS10 toolbox to convert from EOS80 to TEOS10. To avoid issues with updates on the GSW-Fortran tools, Nico has cloned the 2016 GSW-Fortran in this repository:
+
+{% highlight bash %}
+git clone https://github.com/chrisb13/BUILD_CONFIG_NEMO.git
+cd GSW-Fortran/test
+vi makefile   #in particular fill the FC and NETCDF_INCDIR variables
+make
+./gsw_check   # to check (some have to work, maybe not all of them)
+cd ../..
+{% endhighlight %}
+
+> NB: In case you want to check for updates (not recommended), you can still do:
+ git clone https://github.com/TEOS-10/GSW-Fortran.git
+
+The gsw_data_v3_0.nc file provided in this repository should be fine, but in case you start again from the original file (i.e. from github.com/TEOS-10/GSW-Fortran.git), you will need to modify it
+to avoid NaN in some places (otherwise, skip the next 4 lines):
+{% highlight bash %}
+./compile.sh remove_NaN_from_gsw_data_v3_0.f90
+./remove_NaN_from_gsw_data_v3_0
+ncks -x -v ocean_ref,ndepth_ref,deltaSA_ref,SA_ref,SAAR_ref GSW-Fortran/test/gsw_data_v3_0.nc gsw_data_v3_0.nc
+ncks -A gsw_data_v3_0_to_be_ncks-A.nc gsw_data_v3_0.nc
+{% endhighlight %}
+
+Back in root of BUILD_CONFIG_NEMO.git. Edit your own namelist, e.g. namelist_WED12, and link namelist_pre to it:
+{% highlight bash %}
+vi namelist_${CONFIG}
+ln -s -v namelist_${CONFIG} namelist_pre  # in BUILD_CONFIG_NEMO dir
+{% endhighlight %}
+
+Edit `compile_ALL.sh`, adapt fortran compiler (and maybe netcdf path), then execute it: `./compile_ALL.sh`. Create a directory where you will store all the netcdf files created along the following steps, e.g.:
+{% highlight bash %}
+mkdir $WORKDIR/input/nemo_${CONFIG}  # WARNING: this must correspond to the namelist entry "config_dir"
+{% endhighlight %}
+

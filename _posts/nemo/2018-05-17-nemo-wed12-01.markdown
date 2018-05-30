@@ -1,0 +1,178 @@
+---
+author: chris_bull
+comments: true
+date: 2018-05-17 00:30:00+00:00
+layout: post
+slug: nemo-wed12-01
+title: Downloading NEMO and installing XIOS on ARCHER (Step 1)
+categories:
+- nemo
+---
+We take the first step of downloading, compiling and testing NEMO code on ARCHER
+{: .notice}
+
+Pre-requisites:
+
+* [ARCHER account](http://www.archer.ac.uk/access/)
+* [NEMO repository account](http://forge.ipsl.jussieu.fr/nemo/register)
+
+Suggested reading:
+
+* [NEMO reference code and configurations](http://forge.ipsl.jussieu.fr/nemo/wiki/Users/ModelInstall#DownloadNEMOreferencecodeandconfigurations)
+* [BAS howto install NEMO guide (accessible to BAS staff only); this guide is based on these notes](http://wiki.nerc-bas.ac.uk/wiki/index.php/Piethi/NEMO/Install_NEMO)
+* [ARCHER fork of Nicolas Jourdain GitHub repository for WED12 configuration](https://github.com/chrisb13/BUILD_CONFIG_NEMO)
+* [FAQ on getting started with NEMO](http://forge.ipsl.jussieu.fr/nemo/discussion/topic/8)
+
+## Installing NEMO and XIOS
+
+We will first install XIOS, and then NEMO. If you haven't done so already, you'll need to load netCDF and HDF5 libraries as well as Intel compilers. On ARCHER, run:
+
+{% highlight bash %}
+module load cray-netcdf-hdf5parallel/4.4.1.1 
+module load cray-hdf5-parallel/1.10.0.1
+module swap PrgEnv-cray PrgEnv-intel
+{% endhighlight %}
+
+This worked with:
+
+* cray-netcdf-hdf5parallel/4.4.1.1 
+* cray-hdf5-parallel/1.10.0.1
+* PrgEnv-intel/5.2.82
+
+And doesn't work if you do a module purge first, ARCHER on default currently loads:
+{% highlight bash %}
+chbull@eslogin008:~> module list
+Currently Loaded Modulefiles:
+  1) modules/3.2.10.6                      12) gni-headers/4.0-1.0502.10859.7.8.ari  23) bolt/0.6
+  2) eswrap/1.3.3-1.020200.1280.0          13) xpmem/0.1-2.0502.64982.5.3.ari        24) nano/2.2.6
+  3) switch/1.0-1.0502.60522.1.61.ari      14) dvs/2.5_0.9.0-1.0502.2188.1.116.ari   25) leave_time/1.3.0
+  4) cce/8.5.8                             15) alps/5.2.4-2.0502.9774.31.11.ari      26) quickstart/1.0
+  5) craype-network-aries                  16) rca/1.0.0-2.0502.60530.1.62.ari       27) ack/2.14
+  6) craype/2.5.10                         17) atp/2.1.0                             28) xalt/0.6.0
+  7) cray-libsci/16.11.1                   18) PrgEnv-cray/5.2.82                    29) openssl/1.1.0g_build1
+  8) udreg/2.3.2-1.0502.10518.2.17.ari     19) pbs/12.2.401.141761                   30) curl/7.58.0_build1
+  9) ugni/6.0-1.0502.10863.8.29.ari        20) craype-ivybridge                      31) git/2.16.2_build1
+ 10) pmi/5.0.13                            21) cray-mpich/7.5.5                      32) epcc-tools/8.0
+ 11) dmapp/7.0.1-1.0502.11080.8.76.ari     22) packages-archer
+{% endhighlight %}
+
+### XIOS
+
+We'll do XIOS first. The recommended compiler suite for ARCHER is Cray. But as Admiral Ackbar said: "It's a trap!". You will need to use Intel!
+
+Get the latest version of XIOS (currently [XIOS 2](http://forge.ipsl.jussieu.fr/nemo/wiki/Users/ModelInterfacing/InputsOutputs#ExtractingandinstallingXIOS)), which is an I/O server to handle reading and writing data in NEMO. Source code and instructions can be found [here](http://forge.ipsl.jussieu.fr/nemo/wiki/Users/ModelInterfacing/InputsOutputs#ExtractingandinstallingXIOS).
+
+You will need the .fcm, .path, and .env files for XIOS. Get the "arch" files for XIOS at:
+
+* /work/n02/n02/shared/baspog/arch-for-xios/
+
+Put them in the "arch" directory in the XIOS folder. If they are not available, they are as follows. The env file, `/work/n02/n02/shared/baspog/arch-for-xios/arch-XC30_ARCHER.env`:
+{% highlight bash %}
+export HDF5_INC_DIR=${HDF5_DIR}/include
+export HDF5_LIB_DIR=${HDF5_DIR}/lib
+export NETCDF_INC_DIR=${NETCDF_DIR}/include
+export NETCDF_LIB_DIR=${NETCDF_DIR}/lib
+{% endhighlight %}
+
+The fcm file, `/work/n02/n02/shared/baspog/arch-for-xios/arch-XC30_ARCHER.fcm`:
+{% highlight bash %}
+################################################################################
+###################        Projet xios - xmlioserver       #####################
+################################################################################
+
+%CCOMPILER      cc
+%FCOMPILER      ftn
+%LINKER         CC
+
+%BASE_CFLAGS    -DMPICH_SKIP_MPICXX -h msglevel_4 -h zero -h noparse_templates
+%PROD_CFLAGS    -O3 -DBOOST_DISABLE_ASSERTS
+%DEV_CFLAGS     -g -O2
+%DEBUG_CFLAGS   -g
+
+%BASE_FFLAGS    -warn all -zero
+%PROD_FFLAGS    -O3 -fp-model precise -warn all -zero
+%DEV_FFLAGS     -g -O2
+%DEBUG_FFLAGS   -g
+
+%BASE_INC       -D__NONE__
+%BASE_LD        -D__NONE__
+
+%CPP            cpp
+%FPP            cpp -P -CC
+%MAKE           gmake
+{% endhighlight %}
+
+The 'path' file: `/work/n02/n02/shared/baspog/arch-for-xios/arch-XC30_ARCHER.path`:
+{% highlight bash %}
+NETCDF_INCDIR="-I $NETCDF_INC_DIR"
+NETCDF_LIBDIR='-Wl,"--allow-multiple-definition" -Wl,"-Bstatic" -L $NETCDF_LIB_DIR'
+NETCDF_LIB="-lnetcdf -lnetcdff"
+
+MPI_INCDIR=""
+MPI_LIBDIR=""
+MPI_LIB=""
+
+#HDF5_INCDIR="-I $HDF5_INC_DIR"
+HDF5_LIBDIR="-L $HDF5_LIB_DIR"
+HDF5_LIB="-lhdf5_hl -lhdf5 -lz"
+
+OASIS_INCDIR=""
+OASIS_LIBDIR=""
+OASIS_LIB=""
+#OASIS_INCDIR="-I$PWD/../../prism/X64/build/lib/psmile.MPI1"
+#OASIS_LIBDIR="-L$PWD/../../prism/X64/lib"
+#OASIS_LIB="-lpsmile.MPI1 -lmpp_io"
+{% endhighlight %}
+
+
+And then install XIOS by running the following command in the XIOS folder.
+
+In my case, all of the above was:
+{% highlight bash %}
+svn co -r 1011 http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS     #need to use a tested version of the xios 2
+cd /path/to/where/you/cloned/xios/arch
+cp /work/n02/n02/shared/baspog/arch-for-xios/* . #copy the arch files; the .fcm, .path and .env files are the same as before
+cd ..
+chmod +x make_xios 
+./make_xios --prod --full --arch XC30_ARCHER  --jobs 8
+{% endhighlight %}
+The build took 1435 seconds (using the above module versions).
+
+### NEMO
+
+We are using the G06 Met Office revision, clone it (put your NEMO repository username in):
+{% highlight bash %}
+mkdir -p /fs2/n02/n02/chbull/nemo/models
+cd /fs2/n02/n02/chbull/nemo/models
+svn --username 'chrisbull' co http://forge.ipsl.jussieu.fr/nemo/svn/branches/UKMO/dev_r5518_GO6_package@9583
+{% endhighlight %}
+
+Open NEMOGCM/ARCH/arch-XC_ARCHER_INTEL.fcm and make sure the variables "NDF_HOME", "HDF5_HOME" and "XIOS_HOME" point to the netCDF, HDF, and XIOS directories. netCDF and HDF5 directories can be found by running `nc-config --all`. XIOS_HOME should be where you installed XIOS.
+
+In my case, this looked like the following "arch" file (compiler settings):
+{% highlight bash %}
+%NCDF_HOME           /opt/cray/netcdf-hdf5parallel/4.4.1.1/INTEL/15.0/
+%NCDF_HOME_FORTRAN   /opt/cray/netcdf-hdf5parallel/4.4.1.1/INTEL/15.0/
+%HDF5_HOME           /opt/cray/hdf5/1.10.0.1/INTEL/15.0/
+%XIOS_HOME           /fs2/n02/n02/chbull/nemo/models/XIOS/
+
+%NCDF_INC            -I%NCDF_HOME/include -I%NCDF_HOME_FORTRAN/include
+%NCDF_LIB            -L%NCDF_HOME/lib -lnetcdf -L%NCDF_HOME_FORTRAN/lib -lnetcdff
+%XIOS_INC            -I%XIOS_HOME/inc 
+%XIOS_LIB            -L%XIOS_HOME/lib -lxios
+
+%CPP                 cpp
+%FC                  ftn
+%FCFLAGS             -integer-size 32 -real-size 64 -O3 -fp-model precise -zero -fpp -warn all
+%FFLAGS              -integer-size 32 -real-size 64 -O3 -fp-model precise -zero -fpp -warn all
+%LD                  CC -Wl,"--allow-multiple-definition"
+%FPPFLAGS            -P -C -traditional
+%LDFLAGS
+%AR                  ar 
+%ARFLAGS             -r
+%MK                  gmake
+%USER_INC            %XIOS_INC %NCDF_INC
+%USER_LIB            %XIOS_LIB %NCDF_LIB
+{% endhighlight %}
+
+Put here: `/fs2/n02/n02/chbull/nemo/models/dev_r5518_GO6_package/NEMOGCM/ARCH/arch-XC_ARCHER_INTEL.fcm`.

@@ -11,5 +11,5 @@ wordpress_id: 57
 
 High Performance computing/*nix related blog posts.
 
-During my PhD I've noticed that the computer science community has solved a bunch of issues that Climate Science folk could really benefit from...
+I've noticed that the computer science community has solved a bunch of issues that Climate Science folk could really benefit from...
 

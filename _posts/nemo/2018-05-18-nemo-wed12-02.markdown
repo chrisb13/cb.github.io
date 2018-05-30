@@ -1,0 +1,63 @@
+---
+author: chris_bull
+comments: true
+date: 2018-05-18 00:30:00+00:00
+layout: post
+slug: nemo-wed12-01
+title: Testing NEMO (Step 2)
+categories:
+- nemo
+---
+Running an idealised test case configuration with NEMO
+{: .notice}
+
+## Testing NEMO
+
+We will now test NEMO by running a double gyre test case. `cd` into `NEMOGCM/CONFIG` and run `./makenemo -n GYRE_XIOS -m XC_ARCHER_INTEL -j 8` (took 121 seconds).
+
+If you have loaded netCDF, HDF5 and installed XIOS correctly this should work. Go into `NEMOGCM/CONFIG/GYRE_XIOS/EXP00`. Make a link to XIOS by:
+`ln -sf /path/to/xios/bin/xios_server.exe xios_server.exe`
+
+<!--Then open the iodef.xml file and find the first line looking like-->
+<!--`<file_definition type="multiple_file" name="@expname@_@freq@_@startdate@_@enddate@" sync_freq="1ts" min_digits="4">`-->
+<!--Change "multiple_file" to "one_file". -->
+
+This particular branch needs the following namelist tweak (`/fs2/n02/n02/chbull/nemo/models/dev_r5518_GO6_package/NEMOGCM/CONFIG/GYRE_XIOS/EXP00/namelist_cfg`):
+{% highlight bash %}
+&nameos        !   ocean physical parameters
+!-----------------------------------------------------------------------
+   nn_eos      =   0       !  type of equation of state and Brunt-Vaisala frequency
+   ln_useCT    = .false.   ! use of Conservative Temp. ==> surface CT converted in Pot. Temp. in sbcssm
+{% endhighlight %}
+
+Make a runscript named "run_gyre.pbs" like this:
+{% highlight bash %}
+#!/bin/bash 
+#!
+#PBS -N PC-eos80
+#PBS -l walltime=1:00:00
+#PBS -l select=7
+#PBS -j oe
+#PBS -A n02-bas
+
+  export PBS_O_WORKDIR=$(readlink -f $PBS_O_WORKDIR)               
+  export OMP_NUM_THREADS=1
+  cd $PBS_O_WORKDIR
+
+  echo " ";
+  OCEANCORES=144
+  XIOCORES=3
+###############################################################
+
+ulimit -c unlimited
+ulimit -s unlimited
+        aprun -b -n $XIOCORES -N 3 ./xios_server.exe : -n $OCEANCORES -N 24 ./opa
+
+{% endhighlight %}
+Run
+`qsub run_gyre.pbs`
+
+NEMO will now run on 144 cores (6 nodes) and pass all output to XIOS on 3 cores (1 node) which will glue data from all processors into one file. You're output should be in:
+GYRE_5d_00010101_00011230_grid_*.nc
+
+(*Hopefully*!) congratulations, you've just run NEMO! 
