@@ -2,15 +2,15 @@
 
 title:            Christopher Bull
 locale:           en_US
-url:              http://127.0.0.1:4000
-#url:              http://chrisb13.github.io
+#url:              http://127.0.0.1:4000
+url:              http://chrisb13.github.io
 
 # Jekyll configuration
 
 permalink:   /:categories/:title/
 markdown:    kramdown
-#highlighter: rouge
-highlighter: pygments
+highlighter: rouge
+#highlighter: pygments
 sass:
   sass_dir: _sass
   style: compressed
