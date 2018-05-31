@@ -3,7 +3,7 @@ author: chris_bull
 comments: true
 date: 2018-05-21 08:30:00+00:00
 layout: post
-slug: nemo-wed12-01
+slug: nemo-wed12-04
 title: Pre-processing tools for WED12 (Step 4)
 categories:
 - nemo
