@@ -1,0 +1,252 @@
+---
+author: chris_bull
+comments: true
+date: 2018-05-21 10:30:00+00:00
+layout: post
+slug: nemo-wed12-05
+title: Build the inital state and forcing fields for  WED12 (Step 5)
+categories:
+- nemo
+---
+Building the initial state and forcing fields for WED12.
+{: .notice}
+<!--bash_example-->
+
+Suggested reading:
+
+* [ARCHER fork of Nicolas Jourdain GitHub repository for WED12 configuration, this guide is based on these notes](https://github.com/chrisb13/BUILD_CONFIG_NEMO)
+
+Build the bathymetry (and ice shelf draft if needed) and coordinates files for the regional domain.
+Go to your repo, and update the following file for your machine: `vi BUILD_CONFIG_NEMO/submit.sh` (in the ARCHER case this was unnecessary).
+{% highlight bash %}
+./extract_bathy_coord   ## -> should create the bathy and coordinate files,
+                        ##    e.g. bathy_meter_WED12.nc and coordinates_WED12.nc
+                        ##    (stored in directory defined as config_dir in the namelist)
+{% endhighlight %}
+
+## Build the mesh mask
+> Prerequisite: successful compile of NEMO (see Step 3).
+
+Create mesh_mask file.
+
+To do this, you need to run nemo.exe to calculate the exact mesh and mask. Run nemo with nn_msh = 1 in the namelist. No need to have all the input files here, just: xios_files, namelists, coordinates.nc, isf_draft_meter.nc and bathy_meter.nc. It will crash shortly after creating mesh_mask.nc. Details:
+
+{% highlight bash %}
+mkdir -p /fs2/n02/n02/chbull/nemo/run/create_mesh_mask_wed12
+cd /fs2/n02/n02/chbull/nemo/run/create_mesh_mask_wed12
+ln -s /fs2/n02/n02/chbull/nemo/bld_configs/input_WED12/coordinates_WED12.nc coordinates.nc
+ln -s /fs2/n02/n02/chbull/nemo/bld_configs/input_WED12/bathy_meter_WED12.nc bathy_meter.nc
+ln -s /fs2/n02/n02/chbull/nemo/bld_configs/input_WED12/bathy_meter_WED12.nc isf_draft_meter.nc 
+ln -s /fs2/n02/n02/chbull/nemo/models/XIOS/bin/xios_server.exe xios_server.exe
+ln -s /fs2/n02/n02/chbull/nemo/models/dev_r5518_GO6_package/NEMOGCM/CONFIG/WED12/BLD/bin/nemo.exe nemo.exe
+#cp namelist_ref AND namelist_cfg into create_mesh_mask_wed12 folder
+#cp namelist_ice_ref AND namelist_ice_cfg into create_mesh_mask_wed12 folder
+
+#grab any xios2 files just so the model will start, e.g.
+cp /fs2/n02/n02/chbull/nemo/models/dev_r5518_GO6_package/NEMOGCM/CONFIG/GYRE_XIOS/EXP00/iodef.xml /fs2/n02/n02/chbull/nemo/run/create_mesh_mask_wed12_two/
+cp /fs2/n02/n02/chbull/nemo/models/dev_r5518_GO6_package/NEMOGCM/CONFIG/SHARED/field_def.xml /fs2/n02/n02/chbull/nemo/run/create_mesh_mask_wed12_two/
+cp /fs2/n02/n02/chbull/nemo/models/dev_r5518_GO6_package/NEMOGCM/CONFIG/GYRE_XIOS/EXP00/file_def.xml /fs2/n02/n02/chbull/nemo/run/create_mesh_mask_wed12_two/
+cp /fs2/n02/n02/chbull/nemo/models/dev_r5518_GO6_package/NEMOGCM/CONFIG/GYRE_XIOS/EXP00/domain_def.xml /fs2/n02/n02/chbull/nemo/run/create_mesh_mask_wed12_two/
+
+## NB: set jpni=jpnj=jpnij=0 in the &nammpp section of NEMO's namelist.
+##     and use the same &namdom parameters as in the simulation used as BDYs.
+qsub run_nemo.sh    ## this will create mesh_mask_${CONFIG}.nc before crashing
+{% endhighlight %}
+
+
+In my ARCHER case the `run_nemo.sh` file looks like:
+{% highlight bash %}
+#!/bin/bash 
+#!
+#PBS -N PC-eos80
+#PBS -l walltime=1:00:00
+#PBS -l select=1
+#PBS -j oe
+#PBS -A n02-bas
+
+export PBS_O_WORKDIR=$(readlink -f $PBS_O_WORKDIR)               
+export OMP_NUM_THREADS=1
+cd $PBS_O_WORKDIR
+
+aprun -n 2 ./nemo.exe
+aprun -n 2 ./xios_server.exe
+{% endhighlight %}
+
+This should result in mesh_mask_0000.nc and mesh_mask_0001.nc out of this (check that mbathy, misf, isfdraft look sensible). We now need to stick them back together...
+
+{% highlight bash %}
+cd /fs2/n02/n02/chbull/nemo/run/create_mesh_mask_wed12
+#From BUILD_CONFIG_NEMO, make sure NEMOdir is correct
+./rebuild_mesh_mask.sh 
+mv mesh_mask.nc $WORKDIR/input/nemo_${CONFIG}/mesh_mask_${CONFIG}.nc ## directory defined as config_dir
+{% endhighlight %}
+
+## Create the inital state
+
+Create the initial state (temperature and salinity)
+{% highlight bash %}
+./extract_istate            ## -> should create the initial state for temperature and salinity
+                            ##    e.g. dta_temp_WED12.nc and dta_sal_WED12.nc
+                            ##    (stored in directory defined as config_dir in the namelist)
+{% endhighlight %}
+
+## Ocean forcing files
+Create the lateral boundary conditions (u, v, T, S, SSH, sea-ice thic, sea-ice frac)
+
+{% highlight bash %}
+./build_coordinates_bdy       ## -> creates the coordinate file for lateral boundaries
+                              ##    e.g. coordinates_bdy_WED12.nc
+
+./extract_bdy_gridT           ## -> creates T,S bdy files and store them in a BDY folder
+                              ##    itself located in directory defined as config_dir
+
+./extract_bdy_gridU           ## -> creates U   bdy files and store them in a BDY folder
+./extract_bdy_gridV           ## -> creates V   bdy files and store them in a BDY folder
+./extract_bdy_icemod          ## -> creates ice bdy files and store them in a BDY folder
+./extract_bdy_ssh             ## -> creates SSH bdy files and store them in a BDY folder
+
+./concatenate_yearly_BDY.sh   ## Edit this file first.
+                              ## -> concatenate the bdy files into yearly files
+
+./extract_bdy_tides           ## if you want to put tidal signals along the BDYs
+{% endhighlight %}
+
+### Interpolate CICE onto NEMO 
+If necessary, interpolate CICE onto NEMO grid before running ./extract_bdy_icemod (above). We use CDO to do a linear interpoation. Here's an example:
+{% highlight bash %}
+#hack up a griddes file so the source file looks more like the target..
+cdo griddes mi-an854o_1m_19960101_20050130_01_grid_T_toy.nc > new_grid.txt
+cdo griddes mi-an854i.1m.1995-01_small_toy.nc > old_grid.txt
+
+#xname/yname as nav_lon/nav_lat (the latter seems to be important to match the target x/y names)
+sed -i -e 's/TLON/nav_lon/g' old_grid.txt
+sed -i -e 's/TLAT/nav_lat/g' old_grid.txt
+
+#remove area from new_grid.txt, the following will help find it.
+#grep –n “[a-d][f-z] new_grid.txt 
+
+#re-write with hacked grid defn
+cdo setgrid,old_grid.txt -select,name=aice,hi,hs ../mi-an854i.1m.1995-01.nc ./mi-an854i.1m.1995-01_small_newgriddefn.nc
+
+#Re-mapping, creating the weights first.. 
+cdo gennn,new_grid.txt mi-an854i.1m.1995-01_small_newgriddefn.nc weights.nc
+cdo remap,new_grid.txt,weights.nc mi-an854i.1m.1995-01_small_newgriddefn.nc mi-an854i.1m.1995-01_small_newgriddefn_remapnn_two.nc
+
+#copy interpolated data to a G07 file and match LIM variable names according to BUILD_CONFIG_NEMO/src/extract_bdy_icemod.f90
+{% endhighlight %}
+<!--See nemo_wed_analysis/configs/wed12/fix_lim_icemod.py for last step-->
+
+Other files (SSS for restoring, runoff, chlorophyll)
+{% highlight bash %}
+./extract_SSS_restoring       ## -> creates SSS files and store them in a SSS folder
+./concatenate_yearly_SSS.sh   ## Edit this file first.
+                              ## -> concatenate the bdy files into yearly files
+
+./extract_runoff_icebergs     ## -> creates iceberg runoff file
+                              ##    (stored in config_dir defined in the namelist)
+
+./extract_chloro              ## -> creates chlorophyll file
+                              ##    (stored in config_dir defined in the namelist)
+{% endhighlight %}
+
+## Atmospheric forcing files
+Weights for the interpolation of atmospheric forcing
+{% highlight bash %}
+# here it is assumed that you have NEMO downloaded and installed as explained in step #1
+cd $WORKDIR/models/MY_NEMO/NEMOGCM/TOOLS
+maketools -m X64_ADA -n WEIGHTS           ## Adapt for any machine different from ADA (try makenemo -h)
+cd WEIGHTS                                ## See nice README file in this directoy.
+cp -p nocsutil/namelist_example_bilin namelist_WEIGHTS_${CONFIG}_bilin ## Edit this namelist
+{% endhighlight %}
+> NB: you may have to increase char_len in src/kinds_mod.f90 if you include long path for file names.
+
+Below is an example for `namelist_WEIGHTS_${CONFIG}_bilin`:
+{% highlight bash %}
+&grid_inputs
+    input_file = 'drowned_precip_DFS5.2_y1993.nc'
+    nemo_file = 'coordinates_WED12.nc'
+    datagrid_file = 'remap_data_grid.nc'
+    nemogrid_file = 'remap_nemo_grid.nc'
+    method = 'regular'
+    input_lon = 'LON'
+    input_lat = 'LAT'
+    nemo_lon = 'glamt'
+    nemo_lat = 'gphit'
+    nemo_mask = 'none'
+    nemo_mask_value = 10
+    input_mask = 'none'
+    input_mask_value = 10
+/
+
+&remap_inputs
+    num_maps = 1
+    grid1_file = 'remap_data_grid.nc'
+    grid2_file = 'remap_nemo_grid.nc'
+    interp_file1 = 'data_nemo_bilin.nc'
+    interp_file2 = 'nemo_data_bilin.nc'
+    map1_name = 'data to nemo bilin Mapping'
+    map2_name = 'nemo to data bilin Mapping'
+    map_method = 'bilinear'
+    normalize_opt = 'frac'
+    output_opt = 'scrip'
+    restrict_type = 'latitude'
+    num_srch_bins = 90
+    luse_grid1_area = .false.
+    luse_grid2_area = .false.
+/
+
+&interp_inputs
+    input_file = "drowned_precip_DFS5.2_y1993.nc"
+    interp_file = "data_nemo_bilin.nc"
+    input_name = "snow"
+    input_start = 1,1,1,1
+    input_stride = 1,1,1,1
+    input_stop = 0,0,0,1
+    input_vars = 'initial_time0_hours'
+/
+
+&interp_outputs
+    output_file = "snow_orca.nc"
+    output_mode = "create"
+    output_dims = 'x', 'y', 'time_counter'
+    output_scaling = "snow|1.0", "time_counter|86400.0"
+    output_name = 'snow'
+    output_lon = 'x'
+    output_lat = 'y'
+    output_vars = 'time_counter'
+    output_attributes = 'time_counter|units|seconds since 1995-00-00 00:00:00',
+                        'time_counter|calendar|noleap',
+                        'snow|units|mm/s'
+/
+{% endhighlight %}
+
+Then, execute these things:
+{% highlight bash %}
+#create links to relevant input files
+#coordinates_WED12.nc -> /fs2/n02/n02/chbull/nemo/bld_configs/input_WED12/coordinates_WED12.nc
+#drowned_precip_DFS5.2_y1993.nc -> /fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/precip_core_y1978.nc
+#snow_orca.nc -> /fs2/n02/n02/chbull/nemo/bld_configs/input_WED12_mathiot_eORCA025-GO7/snow_core_y1970.nc
+
+./scripgrid.exe   ## namelist_${CONFIG}_bilin
+./scrip.exe       ## namelist_${CONFIG}_bilin
+./scripshape.exe  ## namelist_${CONFIG}_bilin
+{% endhighlight %}
+
+Then create another namelist:  `namelist_${CONFIG}_bicub` and just change these parameters:
+{% highlight bash %}
+interp_file1 = 'data_nemo_bicubic.nc'
+interp_file2 = 'nemo_data_bicubic.nc'
+map1_name = 'data to nemo bicubic Mapping'
+map2_name = 'nemo to data bicubic Mapping'
+map_method = 'bicubic'
+interp_file = 'data_nemo_bicubic.nc'
+output_file = 'weights_bicubic.nc'
+{% endhighlight %}
+
+Then execute :
+{% highlight bash %}
+./scrip.exe       ## namelist_${CONFIG}_bicub
+./scripshape.exe  ## namelist_${CONFIG}_bicub
+{% endhighlight %}
+
+At the end of this, you should have: `weights_bicubic.nc` and `weights_bilin.nc`.
