@@ -154,7 +154,7 @@ Weights for the interpolation of atmospheric forcing
 {% highlight bash %}
 # here it is assumed that you have NEMO downloaded and installed as explained in step #1
 cd $WORKDIR/models/MY_NEMO/NEMOGCM/TOOLS
-maketools -m X64_ADA -n WEIGHTS           ## Adapt for any machine different from ADA (try makenemo -h)
+maketools -m XC_ARCHER_INTEL -n WEIGHTS           ## Adapt for any machine different from ARCHER (try makenemo -h)
 cd WEIGHTS                                ## See nice README file in this directoy.
 cp -p nocsutil/namelist_example_bilin namelist_WEIGHTS_${CONFIG}_bilin ## Edit this namelist
 {% endhighlight %}
