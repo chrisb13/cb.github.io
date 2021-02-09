@@ -1,6 +1,12 @@
 # Site navigation links
+- title: about
+  url: /about/
+
 - title: publications
   url: /publications/
+
+- title: nemo4
+  url: /nemo4/
 
 - title: nemo
   url: /nemo/
@@ -17,9 +23,7 @@
 #- title: Southern Surveyor 
 #  url: /southern_surveyor/
 
-- title: resources
-  url: /resources/
+#- title: resources
+  #url: /resources/
 
-- title: about
-  url: /about/
 

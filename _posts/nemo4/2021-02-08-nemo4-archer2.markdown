@@ -1,0 +1,160 @@
+---
+author: chris_bull
+comments: true
+date: 2021-02-08 00:30:00+00:00
+layout: post
+slug: nemo4-arc2-01
+title: Building and Running NEMO4 on ARCHER2.
+categories:
+- nemo4
+---
+We take the first step of downloading, compiling and testing NEMO4 code on ARCHER2.
+{: .notice}
+
+Pre-requisites:
+
+* [ARCHER account](http://www.archer.ac.uk/access/)
+
+Suggested reading:
+
+* [NEMO4 ARCHER2 help page](https://docs.archer2.ac.uk/research-software/nemo/nemo/)
+
+* [NEMO4 ice-shelf fork Pierre Mathiot](https://github.com/pmathiot/NEMOCFG)
+
+* [Pierre Mathiot NEMO4 docs](https://pmathiot.github.io/NEMOCFG/docs/build/html/simu_eORCA025.html#summary)
+
+## Installing NEMO
+
+Get NEMO4, in my case I'm using [a fork](https://github.com/chrisb13/NEMOCFG) of [Pierre's custom build](https://github.com/pmathiot/NEMOCFG).
+
+> This uses the latest stable version as it's base, namely: NEMO4.0.4.
+
+{% highlight bash %}
+svn co -r 13653  https://forge.ipsl.jussieu.fr/nemo/svn/NEMO/releases/r4.0/r4.0.4 NEMO4
+#optional
+#copy code from Pierre into NEMO folder, something like:
+#git clone git@github.com:chrisb13/NEMOCFG.git
+#cd NEMOCFG
+#git reset --hard 7695557b1a2f67bae2ae0ab1989d878a281c1bab
+#rm -r /path/to/NEMO4/src
+#cp -r /path/from/NEMOCFG/cfgs/eORCA025.L121-OPM006/src /path/to/NEMO4
+{% endhighlight %}
+
+## Build NEMO
+Log-into ARCHER2. Based on [NEMO4 ARCHER2 help page](https://docs.archer2.ac.uk/research-software/nemo/nemo/). Set-up your environment with:
+{% highlight bash %}
+module -s restore /work/n01/shared/acc/n01_modules/ucx_env
+{% endhighlight %}
+
+> From: `/work/n01/shared/acc/arch-X86_ARCHER2-Cray.fcm`
+put into your ARCH folder, i.e., `/lus/cls01095/work/n02/n02/chbull/nemo/models/NEMO4/arch/arch-X86_ARCHER2-Cray.fcm`
+
+{% highlight bash %}
+%NCDF_HOME           $NETCDF_DIR
+%HDF5_HOME           $HDF5_DIR
+%XIOS_HOME           /work/n01/shared/acc/xios-2.5
+
+%NCDF_INC            -I%NCDF_HOME/include -I%HDF5_HOME/include
+%NCDF_LIB            -L%HDF5_HOME/lib -L%NCDF_HOME/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lz
+%XIOS_INC            -I%XIOS_HOME/inc
+%XIOS_LIB            -L%XIOS_HOME/lib -lxios
+
+%CPP	             cpp
+%FC                  ftn
+%FCFLAGS             -em -s integer32 -s real64 -O1 -hflex_mp=intolerant
+%FFLAGS              -em -s integer32 -s real64 -O1 -hflex_mp=intolerant
+%LD                  CC -Wl,"--allow-multiple-definition"
+%FPPFLAGS            -P -traditional
+%LDFLAGS             -lmpifort_cray
+%AR                  ar
+%ARFLAGS             -r
+%MK                  gmake
+%USER_INC            %XIOS_INC %NCDF_INC
+%USER_LIB            %XIOS_LIB %NCDF_LIB
+
+%CC                  cc
+%CFLAGS              -O0
+{% endhighlight %}
+
+Add `-J` flag to `FC_MODSEARCH` in `/lus/cls01095/work/n02/n02/chbull/nemo/models/NEMO4/ext/FCM/lib/Fcm/Config.pm`, should look like
+{% highlight bash %}
+FC_MODSEARCH => '-J',                # FC flag, specify "module" path
+{% endhighlight %}
+
+Add `key_nosignedzero` to `/lus/cls01095/work/n02/n02/chbull/nemo/models/NEMO4/tests/ISOMIPY/cpp_ISOMIPY.fcm`, should have:
+{% highlight bash %}
+chbull@uan01:/work/n02/n02/chbull/nemo/models/NEMO4/tests/ISOMIPY> cat cpp_ISOMIPY.fcm 
+ bld::tool::fppkeys   key_iomput key_mpp_mpi key_nosignedzero
+{% endhighlight %}
+
+Test compile works, i.e., 
+{% highlight bash %}
+
+cd /lus/cls01095/work/n02/n02/chbull/nemo/models/NEMO4
+./makenemo -n 'ISOMIPY' -a 'ISOMIP' -m X86_ARCHER2-Cray -j 16
+ls -lah tests/ISOMIPY/BLD/bin/nemo.exe
+# beer time ?
+{% endhighlight %}
+
+
+## Run NEMO 
+
+We use Andrew's script to create a template for a run file.
+{% highlight bash %}
+chbull@uan01:/work/n01/shared/acc> ./mkslurm -S 0 -s 0 -C 24
+Running: mkslurm -S 0 -s 0 -m  2 -C  24 -c  2 -t 00:10:00 -a n01 -j nemo_test
+.
+.
+{% endhighlight %}
+
+With a few trivial changes..
+{% highlight bash %}
+#!/bin/bash
+#SBATCH --job-name=nemo_test
+#SBATCH --time=00:10:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=24
+#SBATCH --account=n02
+#SBATCH --partition=standard
+#SBATCH --qos=short
+# Created by: mkslurm -S 0 -s 0 -m 2 -C  24 -c  2 -t 00:10:00 -a n01 -j nemo_test
+module -s restore /work/n01/shared/acc/n01_modules/ucx_env
+export OMP_NUM_THREADS=1
+#
+cat > myscript_wrapper2.sh << EOFB
+#!/bin/ksh
+#
+set -A map ./xios_server.exe ./nemo
+exec_map=( 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 )
+#
+exec \${map[\${exec_map[\$SLURM_PROCID]}]} 
+##
+EOFB
+chmod u+x ./myscript_wrapper2.sh
+#
+srun --mem-bind=local --cpu-bind=v,map_cpu:00,0x2,0x4,0x6,0x8,0xa,0xc,0xe,0x10,0x12,0x14,0x16,0x18,0x1a,0x1c,0x1e,0x20,0x22,0x24,0x26,0x28,0x2a,0x2c,0x2e, ./myscript_wrapper2.sh
+
+
+{% endhighlight %}
+
+Submit with
+
+{% highlight bash %}
+cd /lus/cls01095/work/n02/n02/chbull/nemo/models/NEMO4/tests/ISOMIPY/EXP00
+ln -s /work/n01/shared/acc/xios-2.5 xios_server.exe
+sbatch --reservation=shortqos /lus/cls01095/work/n02/n02/chbull/nemo/models/NEMO4/tests/ISOMIPY/EXP00/runnemo.sh
+# second beer ?
+{% endhighlight %}
+
+## Build NEMO tools
+Compile REBUILD_NEMO (used to recombine outputs at the end of the jobs -- see NEMO4/tools/REBUILD_NEMO/README.rst) and DOMAINcfg.
+
+{% highlight bash %}
+cd NEMO4/tools/
+./maketools -h 
+./maketools -n REBUILD_NEMO -m X86_ARCHER2-Cray
+./maketools -n DOMAINcfg -m X86_ARCHER2-Cray
+# to check that everything went fine
+ls -lah REBUILD_NEMO/BLD/bin/rebuild_nemo.exe
+ls -lah DOMAINcfg/BLD/bin/make_domain_cfg.exe
+{% endhighlight %}
