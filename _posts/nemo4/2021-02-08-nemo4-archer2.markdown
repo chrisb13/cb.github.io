@@ -107,7 +107,7 @@ Running: mkslurm -S 0 -s 0 -m  2 -C  24 -c  2 -t 00:10:00 -a n01 -j nemo_test
 .
 {% endhighlight %}
 
-With a few trivial changes..
+With a few trivial changes (saving to something like /lus/cls01095/work/n02/n02/chbull/nemo/models/NEMO4/tests/ISOMIPY/EXP00/runnemo.sh; which will make sense in a moment)..
 {% highlight bash %}
 #!/bin/bash
 #SBATCH --job-name=nemo_test
