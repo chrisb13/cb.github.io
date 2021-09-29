@@ -8,6 +8,8 @@ slug: pubs
 title: publications
 ---
 
+* Sérazin G., Di Luca, A., Sen Gupta, A., Rogé, Marine, Jourdain, N. C., Argüeso, D., **Bull**, C. Y. S. (2021). East Australian cyclones and air-sea feedbacks. Journal of Geophysical Research: Atmospheres. https://doi.org/10.1029/2020JD034391 [LINK](https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2020JD034391)
+
 * **Bull**, C. Y. S., Jenkins, A., Jourdain, N. C., Vaňková, I., Holland, P. R., Mathiot, P., Hausmann, U., Sallée, J (2021). Remote control of Filchner‐Ronne Ice Shelf melt rates by the Antarctic Slope Current. Journal of Geophysical Research: Oceans. https://doi.org/10.1029/2020JC016550 [LINK](https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2020JC016550)
 
 * **Bull**, C. Y. S., Kiss, A. E., Sen Gupta, A., Jourdain, N. C., Argüeso, D., Di Luca, A., Sérazin, G. (2020). Regional versus remote atmosphere-ocean drivers of the rapid projected intensification of the East Australian Current.  Journal of Geophysical Research: Oceans. https://doi.org/10.1029/2019JC015889 [LINK](https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2019JC015889)
