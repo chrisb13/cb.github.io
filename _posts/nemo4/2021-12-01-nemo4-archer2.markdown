@@ -21,16 +21,14 @@ Suggested reading:
 
 ## Installing NEMO
 
-Get NEMO4, in my case I'm using [a fork](https://github.com/chrisb13/NEMOCFG) of [Pierre's custom build](https://github.com/pmathiot/NEMOCFG).
-
-> This uses the latest stable version as it's base, namely: NEMO4.0.4.
+Get NEMO4, in my case I'm using a 4.0.4 branch.. 
 
 {% highlight bash %}
 svn -r 15194 co https://forge.ipsl.jussieu.fr/nemo/svn/NEMO/branches/UKMO/NEMO_4.0.4_momentum_trends NEMO404_MO
 {% endhighlight %}
 
 ## Build NEMO
-Log-into ARCHER2 (full system). Based on [NEMO4 ARCHER2 help page](https://docs.archer2.ac.uk/research-software/nemo/nemo/). Set-up your environment with:
+The following is based on [NEMO4 ARCHER2 help page](https://docs.archer2.ac.uk/research-software/nemo/nemo/). Log-into ARCHER2 (full system). Set-up your environment with:
 {% highlight bash %}
 module restore
 module load cray-hdf5-parallel
@@ -39,8 +37,7 @@ module load xpmem
 module load perftools-base
 {% endhighlight %}
 
-> From: `/work/n01/shared/acc/arch-X86_ARCHER2-Cray.fcm`
-put into your ARCH folder, i.e., `/work/n02/n02/chbull/temp/NEMO404_MO/arch/arch-X86_ARCHER2-Cray.fcm`
+> Originally from ARCHER2 4c: `/work/n01/shared/acc/arch-X86_ARCHER2-Cray.fcm` put into your ARCH folder, i.e., `/work/n02/n02/chbull/temp/NEMO404_MO/arch/arch-X86_ARCHER2-Cray.fcm`
 
 {% highlight bash %}
 %NCDF_HOME           $NETCDF_DIR
@@ -69,7 +66,7 @@ put into your ARCH folder, i.e., `/work/n02/n02/chbull/temp/NEMO404_MO/arch/arch
 %CFLAGS              -O0
 {% endhighlight %}
 
-Add `-J` flag to `FC_MODSEARCH` in `/lus/cls01095/work/n02/n02/chbull/nemo/models/NEMO4/ext/FCM/lib/Fcm/Config.pm`, should look like
+Add `-J` flag to `FC_MODSEARCH` in `/work/n02/n02/chbull/temp/NEMO404_MO/ext/FCM/lib/Fcm/Config.pm`, should look like
 {% highlight bash %}
 FC_MODSEARCH => '-J',                # FC flag, specify "module" path
 {% endhighlight %}
@@ -92,15 +89,7 @@ ls -lah tests/ISOMIPY/BLD/bin/nemo.exe
 
 ## Run NEMO 
 
-We use Andrew's script to create a template for a run file.
-{% highlight bash %}
-chbull@uan01:/work/n01/shared/acc> ./mkslurm -S 0 -s 0 -C 24
-Running: mkslurm -S 0 -s 0 -m  2 -C  24 -c  2 -t 00:10:00 -a n01 -j nemo_test
-.
-.
-{% endhighlight %}
-
-Make a run script (saving to something like /work/n02/n02/chbull/temp/NEMO404_MO/tests/ISOMIPY/EXP00/runnemo.sh; which will make sense in a moment)..
+We use Andrew's script to create a template for a run file (saving to something like /work/n02/n02/chbull/temp/NEMO404_MO/tests/ISOMIPY/EXP00/runnemo.sh; which will make sense in a moment)..
 {% highlight bash %}
 #!/bin/bash
 #SBATCH --job-name=nemo_test
@@ -143,5 +132,8 @@ cd /work/n02/n02/chbull/temp/NEMO404_MO/tests/ISOMIPY/EXP00
 # nb: https://docs.archer2.ac.uk/archer2-migration/archer2-differences/
 # no short flag required anymore..
 sbatch /work/n02/n02/chbull/temp/NEMO404_MO/tests/ISOMIPY/EXP00/runnemo.sh
+# keep an eye on it with
+squeue -u USERNAME
+tail -f ocean.output
 # second beer ?
 {% endhighlight %}
