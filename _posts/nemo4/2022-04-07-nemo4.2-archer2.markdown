@@ -1,0 +1,107 @@
+---
+author: alethea mountford
+comments: true
+date: 2022-04-07 00:30:00+00:00
+layout: post
+slug: nemo42-arc2-01
+title: Building and Running NEMO4.2 on ARCHER2.
+categories:
+- nemo4
+---
+We take the steps of downloading, compiling and testing NEMO4.2 code on ARCHER2. This post is written by TiPACCs PDRA Alethea Mountford (alethea.mountford@northumbria.ac.uk), thanks Alethea!
+{: .notice}
+
+Pre-requisites:
+
+* [ARCHER account](http://www.archer.ac.uk/access/)
+
+Suggested reading:
+
+* [NEMO4 ARCHER2 help page](https://docs.archer2.ac.uk/research-software/nemo/nemo/)
+
+* [NEMO home page](https://forge.nemo-ocean.eu/nemo/nemo) 
+
+* [Preparing and running NEMO4 on occigen](https://nicojourdain.github.io/students_dir/students_nemo4_occigen/) 
+
+* [NEMO4 ice-shelf fork Pierre Mathiot](https://github.com/pmathiot/NEMOCFG)
+
+* [Pierre Mathiot NEMO4 docs](https://pmathiot.github.io/NEMOCFG/docs/build/html/simu_eORCA025.html#summary)
+
+## Installing NEMO
+
+Get NEMO4.2.0, note that as of the NEMO4.2.0 release, svn is no longer supported. Further reading on the [NEMO site](https://sites.nemo-ocean.io/user-guide/install.html#download-and-install-the-nemo-code) 
+
+{% highlight bash %}
+git clone --branch 4.2.0 https://forge.nemo-ocean.eu/nemo/nemo.git NEMORC
+{% endhighlight %}
+
+## Build NEMO
+Log-into ARCHER2. Based on [NEMO4 ARCHER2 help page](https://docs.archer2.ac.uk/research-software/nemo/nemo/). Set-up your environment with:
+{% highlight bash %}
+module -s restore /work/n01/shared/acc/n01_modules/ucx_env
+{% endhighlight %}
+
+> From: `/work/n01/shared/nemo/ARCH/arch-X86_ARCHER2-Cray_4.2.fcm`
+put into your ARCH folder, i.e., `/work/n02/n02/asmou/NEMORC/arch/arch-X86_ARCHER2-Cray_4.2.fcm`
+
+{% highlight bash %}
+%NCDF_HOME           $NETCDF_DIR
+%HDF5_HOME           $HDF5_DIR
+%XIOS_HOME           /work/n01/shared/nemo/xios-trunk
+#OASIS_HOME          
+
+%NCDF_INC            -I%NCDF_HOME/include -I%HDF5_HOME/include
+%NCDF_LIB            -L%HDF5_HOME/lib -L%NCDF_HOME/lib -lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lz
+%XIOS_INC            -I%XIOS_HOME/inc
+%XIOS_LIB            -L%XIOS_HOME/lib -lxios
+#OASIS_INC           -I%OASIS_HOME/build/lib/mct -I%OASIS_HOME/build/lib/psmile.MPI1
+#OASIS_LIB           -L%OASIS_HOME/lib -lpsmile.MPI1 -lmct -lmpeu -lscrip
+
+%CPP                 cpp -Dkey_nosignedzero
+%FC                  ftn
+%FCFLAGS             -em -s integer32 -s real64 -O0 -hflex_mp=intolerant -N1023
+%FFLAGS              -em -s integer32 -s real64 -O0 -hflex_mp=intolerant -N1023
+%LD                  CC
+%FPPFLAGS            -P -traditional
+%LDFLAGS             -lmpifort_cray
+%AR                  ar
+%ARFLAGS             -r
+%MK                  gmake
+%USER_INC            %XIOS_INC %NCDF_INC
+%USER_LIB            %XIOS_LIB %NCDF_LIB
+#USER_INC            %XIOS_INC %OASIS_INC %NCDF_INC
+#USER_LIB            %XIOS_LIB %OASIS_LIB %NCDF_LIB
+
+%CC                  cc -Wl,"--allow-multiple-definition"
+%CFLAGS              -O1 -Wl,"--allow-multiple-definition"
+{% endhighlight %}
+
+Add `-J` flag to `FC_MODSEARCH` in `/work/n02/n02/asmou/NEMORC/ext/FCM/lib/Fcm/Config.pm`, should look like
+{% highlight bash %}
+FC_MODSEARCH => '-J',                # FC flag, specify "module" path
+{% endhighlight %}
+
+
+Test compile works, i.e., 
+{% highlight bash %}
+cd /work/n02/n02/asmou/NEMORC
+./makenemo -r WED025 -m X86_ARCHER2-Cray_4.2 -j 16
+ls -lah cfgs/WED025/BLD/bin/nemo.exe
+{% endhighlight %}
+
+If `-Dkey_nosignedzero` has been added to `arch-X86_ARCHER2-Cray_4.2.fcm` then `key_nosignedzero` should have been added to `cpp_WED025.fcm`, i.e should have:
+{% highlight bash %}
+bld::tool::fppkeys key_xios key_si3 key_qco key_isf key_nosignedzero
+{% endhighlight %}
+
+If `key_nosignedzero` is not present in `cpp_WED025.fcm`, this can be added manually during compile:
+{% highlight bash %}
+./makenemo -r WED025 -m X86_ARCHER2-Cray_4.2 add_key “key_nosignedzero” -j 16
+{% endhighlight %}
+
+
+Make sure to link the correct xios server (trunk, not 2.5) in your working directory:
+
+{% highlight bash %}
+ln -s /work/n01/shared/nemo/xios-trunk/bin/xios_server.exe xios_server.exe
+{% endhighlight %}
