@@ -8,6 +8,10 @@ title: Building and Running NEMO4.2 on ARCHER2.
 categories:
 - nemo4
 ---
+<!---
+note the author is *not* chris_bull but Alethea Mountford!! 
+-->
+
 We take the steps of downloading, compiling and testing NEMO4.2 code on ARCHER2. This post is written by TiPACCs PDRA Alethea Mountford (alethea.mountford@northumbria.ac.uk), thanks Alethea!
 {: .notice}
 
