@@ -110,3 +110,13 @@ Make sure to link the correct xios server (trunk, not 2.5) in your working direc
 {% highlight bash %}
 ln -s /work/n01/shared/nemo/xios-trunk/bin/xios_server.exe xios_server.exe
 {% endhighlight %}
+
+Download the WED025 auxiliary input files
+{% highlight bash %}
+wget https://zenodo.org/record/6817000/files/WED025_demonstrator_forcings.tar.zip?download=1
+mv WED025_demonstrator_forcings.tar.zip\?download\=1  WED025_demonstrator_forcings.tar.zip
+unzip WED025_demonstrator_forcings.tar.zip
+tar -tvf WED025_demonstrator_forcings.tar
+{% endhighlight %}
+
+For further details, see: https://zenodo.org/record/6817000 
