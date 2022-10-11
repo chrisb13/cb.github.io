@@ -4,7 +4,7 @@ comments: true
 date: 2022-04-07 00:30:00+00:00
 layout: post
 slug: nemo42-arc2-01
-title: Building and Running NEMO4.2 on ARCHER2.
+title: Building WED025 on NEMO4.2 on ARCHER2.
 categories:
 - nemo4
 ---
@@ -12,7 +12,7 @@ categories:
 note the author is *not* chris_bull but Alethea Mountford!! 
 -->
 
-We take the steps of downloading, compiling and testing NEMO4.2 code on ARCHER2. This post is written by TiPACCs PDRA Alethea Mountford (alethea.mountford@northumbria.ac.uk), thanks Alethea!
+We take the steps of downloading and compiling NEMO4.2 code on ARCHER2. This post is written by TiPACCs PDRA Alethea Mountford (alethea.mountford@northumbria.ac.uk), thanks Alethea!
 {: .notice}
 
 Pre-requisites:
@@ -88,6 +88,7 @@ FC_MODSEARCH => '-J',                # FC flag, specify "module" path
 
 Test compile works, i.e., 
 {% highlight bash %}
+#path to where you cloned NEMO
 cd /work/n02/n02/asmou/NEMORC
 ./makenemo -r WED025 -m X86_ARCHER2-Cray_4.2 -j 16
 ls -lah cfgs/WED025/BLD/bin/nemo.exe
