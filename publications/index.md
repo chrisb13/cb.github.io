@@ -8,6 +8,8 @@ slug: pubs
 title: publications
 ---
 
+* Meredith, M. P., Inall, M. E., Brearley, J. A., Ehmen, T., Sheen, K., Munday, D., ..., **Bull**, C. Y. S. et al. (2022). Internal tsunamigenesis and ocean mixing driven by glacier calving in Antarctica. Science Advances, 8(47), eadd0720. [LINK](https://doi.org/10.1126/sciadv.add0720)
+
 * Verfaillie D., Pelletier, C., Goosse H., Jourdain, N. C., **Bull**, C. Y. S., Dalaiden, Q., Favier, V., Fichefet, T., Wille, J. D. The circum-Antarctic ice-shelves respond to a more positive Southern Annular Mode with regionally varied melting. Commun Earth Environ 3, 139 (2022). [LINK](https://www.nature.com/articles/s43247-022-00458-x)
 
 * Sérazin G., Di Luca, A., Sen Gupta, A., Rogé, Marine, Jourdain, N. C., Argüeso, D., **Bull**, C. Y. S. (2021). East Australian cyclones and air-sea feedbacks. Journal of Geophysical Research: Atmospheres. https://doi.org/10.1029/2020JD034391 [LINK](https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2020JD034391)
