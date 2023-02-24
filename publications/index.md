@@ -8,6 +8,8 @@ slug: pubs
 title: publications
 ---
 
+* Rosier, S. H. R., **Bull**, C. Y. S., Woo, W. L., and Gudmundsson, G. H.: Predicting ocean-induced ice-shelf melt rates using deep learning, The Cryosphere, 17, 499–518, 2023.
+
 * Meredith, M. P., Inall, M. E., Brearley, J. A., Ehmen, T., Sheen, K., Munday, D., ..., **Bull**, C. Y. S. et al. (2022). Internal tsunamigenesis and ocean mixing driven by glacier calving in Antarctica. Science Advances, 8(47), eadd0720. [LINK](https://doi.org/10.1126/sciadv.add0720)
 
 * Verfaillie D., Pelletier, C., Goosse H., Jourdain, N. C., **Bull**, C. Y. S., Dalaiden, Q., Favier, V., Fichefet, T., Wille, J. D. The circum-Antarctic ice-shelves respond to a more positive Southern Annular Mode with regionally varied melting. Commun Earth Environ 3, 139 (2022). [LINK](https://www.nature.com/articles/s43247-022-00458-x)
