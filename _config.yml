@@ -14,7 +14,8 @@ highlighter: rouge
 sass:
   sass_dir: _sass
   style: compressed
-gems:
+# Plugins (previously gems:)
+plugins:
   - jekyll-sitemap
 
 kramdown:
@@ -22,7 +23,7 @@ kramdown:
   footnote_nr: 1
   entity_output: as_char
   toc_levels: 1..6
-  use_coderay: false
+  enable_coderay: false
 
 
 # Site owner
