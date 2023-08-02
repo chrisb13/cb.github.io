@@ -4,6 +4,8 @@ title:            Christopher Bull
 locale:           en_US
 #url:              http://127.0.0.1:4000
 url:              https://cbull.info
+#It was super annoying to fix https, the key is to have the full custom address in the above with https, details
+#https://github.com/mmistakes/minimal-mistakes/issues/1318
 
 # Jekyll configuration
 
