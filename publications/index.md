@@ -8,6 +8,8 @@ slug: pubs
 title: publications
 ---
 
+* Drijfhout, S.S., **Bull**, C. Y. S., Hewitt, H. et al. An Amundsen Sea source of decadal temperature changes on the Antarctic continental shelf. Ocean Dynamics (2023). [LINK](https://link.springer.com/article/10.1007/s10236-023-01587-3)
+
 * **Bull**, C. Y. S., Munday, D. R., Jenkins, A. Influence of topography and winds on the distribution of water masses on the Antarctic Continental Shelf. Authorea (preprint). 2023. [LINK](https://www.authorea.com/users/22198/articles/659291-influence-of-topography-and-winds-on-the-distribution-of-water-masses-on-the-antarctic-continental-shelf).
 
 * Rosier, S. H. R., **Bull**, C. Y. S., Woo, W. L., and Gudmundsson, G. H.: Predicting ocean-induced ice-shelf melt rates using deep learning, The Cryosphere, 17, 499–518, 2023. [LINK](https://tc.copernicus.org/articles/17/499/2023/tc-17-499-2023.html)
