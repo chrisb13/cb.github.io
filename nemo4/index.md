@@ -8,5 +8,5 @@ slug: nemo
 title: nemo4
 ---
 
-Blog posts that describes running and installing NEMO on [ARCHER2](http://www.archer2.ac.uk/). Note that these notes supersede the [NEMO 3.6 notes](https://cbull.info/nemo).
+Blog posts that describes running and installing NEMO4 on [ARCHER2](http://www.archer2.ac.uk/) (mostly). Note that these notes supersede the [NEMO 3.6 notes](https://cbull.info/nemo).
 
