@@ -45,13 +45,13 @@ echo “$CONFIG OCE ICE” >> cfgs/ref_cfgs.txt
 mkdir cfgs/$CONFIG
 echo “bld::tool::fppkeys key_xios key_si3 key_qco key_isf key_nosignedzdero” > cfgs/${CONFIG}/cpp_${CONFIG}.fcm
 ./makenemo -r ${CONFIG} -m X86_ARCHER2-Cray_4.2 -j 8
-{% end highlight %}
+{% endhighlight %}
 
 And check compile was successful
 
 {% highlight bash %}
 ls -al ${CONFIG}/BLD/bin/nemo.exe
-{% end highlight %}
+{% endhighlight %}
 
 
 ## Pre-processing tools (Nico’s regional tools)
@@ -63,21 +63,21 @@ vi makefile # check the FC and NETCDF_INC variables
 make
 ./gsw_check # no need to worry about *all* working
 cd ../..
-{% end highlight %}
+{% endhighlight %}
 
 Back in the main `BUILD_CONFIG_NEMO` directory, compile all of the pre-processing tools
 
 {% highlight bash %}
 vi compile_ALL.sh # check the FC, NETCDF_INC and NETCDF_LIB variables
 ./compile_ALL.sh
-{% end highlight %}
+{% endhighlight %}
 
 Create a new namelist for the regional configuration (e.g. namelist_ROSS025) and link it to the pre-processing namelist that is read by the processing tools
 
 {% highlight bash %}
 vi namelist_${CONFIG}
 ln -s -v namelist_${CONFIG} namelist_pre
-{% end highlight %}
+{% endhighlight %}
 
 Make sure to adapt the regional namelist (i.e. specify the domain bounds in order to cover the desired region).
 
@@ -89,7 +89,7 @@ nn_imin_extract       =  199
 nn_imax_extract       =  821
 nn_jmin_extract       =    2
 nn_jmax_extract       =  452
-{% end highlight %}
+{% endhighlight %}
 
 in the namelist_pre. 
 
@@ -97,7 +97,7 @@ It is worth noting that all parent files used for the creation of the regional c
 
 {% highlight bash %}
 ncks -L 1 --cnk_dmn time_counter,1 --cnk_dmn y,200 --cnk_dmn x,200 --cnk_dmn nav_lev,200 -d y,0,500 source_file.nc output_file.nc
-{% end highlight %}
+{% endhighlight %}
 
 ## Create the bathymetry and coordinates files
 
@@ -105,7 +105,7 @@ This requires filling in the `&general` and `&griddata` sections of your namelis
 
 {% highlight bash %}
 ./extract_bathy_coord
-{% end highlight %}
+{% endhighlight %}
 
 Which should create your `bathy_meter_${CONFIG}.nc` and `coordinate_${CONFIG}.nc` files
 
@@ -116,7 +116,7 @@ Compile the NEMO DOMAINcfg tool in NEMO/tools/DOMAINcfg and REBUILD_NEMO tool in
 {% highlight bash %}
 ./maketools -m X86_ARCHER2-Cray_4.2 -n DOMAINcfg
 ./maketools -m X86_ARCHER2-Cray_4.2 -n REBUILD_NEMO
-{% end highlight %}
+{% endhighlight %}
 
 Note, that this needs to be done in the main NEMO directory (the same as when compiling NEMO itself using ./makenemo)
 
