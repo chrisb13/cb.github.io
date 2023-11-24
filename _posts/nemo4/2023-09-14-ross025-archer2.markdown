@@ -93,7 +93,7 @@ nn_jmax_extract       =  452
 
 in the namelist_pre. 
 
-It is worth noting that all parent files used for the creation of the regional configuration must be the same grid size. Parent files were provided by Pierre Mathiot (pierre.mathiot@univ-grenoble-alpes.fr – thanks Pierre!) either through personal communication (namely the BDY files) or sourced from his [global eORCA025 input files]( https://pmathiot.github.io/NEMOCFG/docs/build/html/input_eORCA025.html). Global files were cropped as follows
+It is worth noting that all parent files used for the creation of the regional configuration must be the same grid size. Parent files were provided by Pierre Mathiot (pierre.mathiot@univ-grenoble-alpes.fr – thanks Pierre!) either through personal communication (namely the BDY files) or sourced from his [global eORCA025 input files](https://pmathiot.github.io/NEMOCFG/docs/build/html/input_eORCA025.html). Global files were cropped as follows
 
 {% highlight bash %}
 ncks -L 1 --cnk_dmn time_counter,1 --cnk_dmn y,200 --cnk_dmn x,200 --cnk_dmn nav_lev,200 -d y,0,500 source_file.nc output_file.nc
@@ -122,7 +122,7 @@ Note, that this needs to be done in the main NEMO directory (the same as when co
 
 ## Create the initial state and atmospheric forcing files
 
-Refer to the detailed instructions written by [Nico Jourdain] ](https://nicojourdain.github.io/students_dir/students_nemo4_occigen/) and [Chris Bull]( https://cbull.info/nemo/nemo-wed12-05/) using the [BUILD_CONFIG_NEMO pre-processing tools]( https://github.com/chrisb13/BUILD_CONFIG_NEMO)
+Refer to the detailed instructions written by [Nico Jourdain](https://nicojourdain.github.io/students_dir/students_nemo4_occigen/) and [Chris Bull](https://cbull.info/nemo/nemo-wed12-05/) using the [BUILD_CONFIG_NEMO pre-processing tools](https://github.com/chrisb13/BUILD_CONFIG_NEMO)
 
 ## Run NEMO
 
