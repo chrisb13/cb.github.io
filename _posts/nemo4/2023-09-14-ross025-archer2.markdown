@@ -1,0 +1,129 @@
+---
+author: alethea_mountford
+comments: true
+date: 2023-09-14 00:30:00+00:00
+layout: post
+slug: nemo4-ross025
+title: Building ROSS025 on NEMO4.2 on ARCHER2. 
+categories:
+- nemo4
+---
+We take the steps of building a regional Ross Sea configuration using NEMO 4.2 on ARCHER2. This post is written by TiPACCs PDRA Alethea Mountford (alethea.mountford@northumbria.ac.uk), thanks Alethea!
+{: .notice}
+
+Pre-requisites:
+
+* [ARCHER account](http://www.archer.ac.uk/access/)
+
+* [Successful compile of NEMO4.2 on ARCHER2](https://cbull.info/nemo4/nemo42-arc2-01/)
+
+Suggested reading:
+
+* [NEMO4 ARCHER2 help page](https://docs.archer2.ac.uk/research-software/nemo)
+
+* [NEMO home page](https://forge.nemo-ocean.eu/nemo/nemo) 
+
+* [Preparing and running NEMO4 on occigen](https://nicojourdain.github.io/students_dir/students_nemo4_occigen/) 
+
+* [NEMO4 ice-shelf fork Pierre Mathiot](https://github.com/pmathiot/NEMOCFG)
+
+* [Pierre Mathiot NEMO4 docs](https://pmathiot.github.io/NEMOCFG/docs/build/html/simu_eORCA025.html#summary)
+
+## Create ROSS025 configuration
+
+We can make a new ROSS025 configuration using WED025 as a reference (`-r`), as below
+
+{% highlight bash %}
+./makenemo -n ROSS025 -r WED025 -m X86_ARCHER2-Cray_4.2 -j 8
+{% endhighlight %}
+
+OR create and compile a new configuration from scratch
+
+{% highlight bash %}
+export CONFIG='ROSS025'
+echo “$CONFIG OCE ICE” >> cfgs/ref_cfgs.txt
+mkdir cfgs/$CONFIG
+echo “bld::tool::fppkeys key_xios key_si3 key_qco key_isf key_nosignedzdero” > cfgs/${CONFIG}/cpp_${CONFIG}.fcm
+./makenemo -r ${CONFIG} -m X86_ARCHER2-Cray_4.2 -j 8
+{% end highlight %}
+
+And check compile was successful
+
+{% highlight bash %}
+ls -al ${CONFIG}/BLD/bin/nemo.exe
+{% end highlight %}
+
+
+## Pre-processing tools (Nico’s regional tools)
+
+{% highlight bash %}
+git clone https://github.com/nicojourdain/BUILD_CONFIG_NEMO.git
+cd GDW-Fortran/test
+vi makefile # check the FC and NETCDF_INC variables
+make
+./gsw_check # no need to worry about *all* working
+cd ../..
+{% end highlight %}
+
+Back in the main `BUILD_CONFIG_NEMO` directory, compile all of the pre-processing tools
+
+{% highlight bash %}
+vi compile_ALL.sh # check the FC, NETCDF_INC and NETCDF_LIB variables
+./compile_ALL.sh
+{% end highlight %}
+
+Create a new namelist for the regional configuration (e.g. namelist_ROSS025) and link it to the pre-processing namelist that is read by the processing tools
+
+{% highlight bash %}
+vi namelist_${CONFIG}
+ln -s -v namelist_${CONFIG} namelist_pre
+{% end highlight %}
+
+Make sure to adapt the regional namelist (i.e. specify the domain bounds in order to cover the desired region).
+
+The exact domain bounds for the ROSS025 configuration are specified as
+
+{% highlight bash %}
+! Choose the domain bounds on global grid that is extracted (e.g. eORCA12; WARNING: will be rounded to closest point of the coarse grid if ln_coarse_bdy = true) :
+nn_imin_extract       =  199
+nn_imax_extract       =  821
+nn_jmin_extract       =    2
+nn_jmax_extract       =  452
+{% end highlight %}
+
+in the namelist_pre. 
+
+It is worth noting that all parent files used for the creation of the regional configuration must be the same grid size. Parent files were provided by Pierre Mathiot (pierre.mathiot@univ-grenoble-alpes.fr – thanks Pierre!) either through personal communication (namely the BDY files) or sourced from his [global eORCA025 input files]( https://pmathiot.github.io/NEMOCFG/docs/build/html/input_eORCA025.html). Global files were cropped as follows
+
+{% highlight bash %}
+ncks -L 1 --cnk_dmn time_counter,1 --cnk_dmn y,200 --cnk_dmn x,200 --cnk_dmn nav_lev,200 -d y,0,500 source_file.nc output_file.nc
+{% end highlight %}
+
+## Create the bathymetry and coordinates files
+
+This requires filling in the `&general` and `&griddata` sections of your namelist_ROSS025 file with the parent bathymetry/coordinate files and specifying the domain bounds
+
+{% highlight bash %}
+./extract_bathy_coord
+{% end highlight %}
+
+Which should create your `bathy_meter_${CONFIG}.nc` and `coordinate_${CONFIG}.nc` files
+
+## Create the domain_cfg and mesh_mask files
+
+Compile the NEMO DOMAINcfg tool in NEMO/tools/DOMAINcfg and REBUILD_NEMO tool in NEMO/tools/REBUILD_NEMO, i.e.
+
+{% highlight bash %}
+./maketools -m X86_ARCHER2-Cray_4.2 -n DOMAINcfg
+./maketools -m X86_ARCHER2-Cray_4.2 -n REBUILD_NEMO
+{% end highlight %}
+
+Note, that this needs to be done in the main NEMO directory (the same as when compiling NEMO itself using ./makenemo)
+
+## Create the initial state and atmospheric forcing files
+
+Refer to the detailed instructions written by [Nico Jourdain] ](https://nicojourdain.github.io/students_dir/students_nemo4_occigen/) and [Chris Bull]( https://cbull.info/nemo/nemo-wed12-05/) using the [BUILD_CONFIG_NEMO pre-processing tools]( https://github.com/chrisb13/BUILD_CONFIG_NEMO)
+
+## Run NEMO
+
+With all of the files in place and the relevant .xml and namelist files, you should be ready to run NEMO. See [Building and Running NEMO4 on ARCHER2 full system](https://cbull.info/nemo4/nemo42-arc2-01/) for a refresher on run scripts (but remember to use X86_ARCHER-Cray_4.2 when compiling and xios_trunk)
