@@ -44,6 +44,7 @@ cp arch-X64_JEANZAY_OPENMPI.path arch-X64_PSMN_E5.path
 {% endhighlight %}
 
 To modify the files: `vi arch-X64_PSMN_E5.path` and then:
+
 `NETCDF_INCDIR=""` becomes `NETCDF_INCDIR="-I$NETCDFF_INCDIR -I$NETCDF_INC_DIR"`
 `NETCDF_LIBDIR=""` becomes `NETCDF_LIBDIR="-L$NETCDFF_LIBDIR -L$NETCDF_LIB_DIR"`
 `HDF5_INCDIR=""` becomes `HDF5_INCDIR="-I$HDF5_INC_DIR"`
@@ -51,12 +52,14 @@ To modify the files: `vi arch-X64_PSMN_E5.path` and then:
 `HDF5_LIB=""` becomes `HDF5_LIB="-lhdf5_hl -lhdf5 -lhdf5 -lz"`
 
 `vi arch-X64_E5.fcm`:
+
 In `LINKER` line delete `-nofor-main`
 `%BASE_CFLAGS    -diag-disable 1125 -diag-disable 279 -std=c++11` becomes `%BASE_CFLAGS    -w -std=c++11 -D__XIOS_EXCEPTION`
 `%CPP            mpiicc -EP` becomes `%CPP            mpicc -EP`
 
 Then we will create the `arch-X64_PSMN_foss_2023a_E5.env` file:
 `vi arch-X64_PSMN_foss_2023a_E5.env` and then write:
+
 {% highlight bash %}
 module use /applis/PSMN/debian11/E5/modules/all/
 module load netCDF-Fortran/4.6.1-gompi-2023a
