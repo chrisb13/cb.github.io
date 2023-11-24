@@ -4,11 +4,11 @@ comments: true
 date: 2023-11-23 00:30:00+00:00
 layout: post
 slug: nemo4-PSMN-E5-01
-title: Building and Running XIOS and NEMO4 on PSMN with partition E5.
+title: Building and Running XIOS and NEMO4 on PSMN (ENS de Lyon HPC) with partition E5.
 categories:
 - nemo4
 ---
-We take the first step of downloading, compiling and testing XIOS and NEMO4 code on PSMN. This is a post based on an installation made by Cerasela Calugaru. Thank you Cerasela !
+We take the first step of downloading, compiling and testing XIOS and NEMO4 code on **PSMN (ENS de Lyon; Lyon, France)**. This is a post based on an installation made by Cerasela Calugaru. Thank you Cerasela ! This post is written by Louis Saddier (louis.saddier@ens-lyon.fr), thanks Louis! 
 {: .notice}
 
 Pre-requisites:
