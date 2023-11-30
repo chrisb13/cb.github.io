@@ -36,31 +36,65 @@ Get XIOS :
 svn co http://forge.ipsl.jussieu.fr/ioserver/svn/XIOS/trunk XIOS
 {% endhighlight %}
 
-Now we will need to adapt arch files for the E5 partition of PSMN. We will copy the `arch-X64_JEANZAY_OPENMPI.[path-fcm]` files and modify them:
+Now we need to create `arch` files to indicate the options we want when we will compile XIOS. First we will create a `.path` file:
 {% highlight bash %}
-cd XIOS
-cp arch-X64_JEANZAY_OPENMPI.env arch-X64_PSMN_E5.env
-cp arch-X64_JEANZAY_OPENMPI.path arch-X64_PSMN_E5.path
+cd XIOS/arch/
+vi arch-X64_PSMN_E5.path
+{% endhighlight %}
+and write:
+{% highlight bash %}
+NETCDF_INCDIR="-I$NETCDFF_INCDIR -I$NETCDF_INC_DIR"
+NETCDF_LIBDIR="-L$NECDFF_LIBDIR -L$NETCDF_LIB_DIR"
+NETCDF_LIB="-lnetcdff -lnetcdf"
+
+MPI_INCDIR=""
+MPI_LIBDIR=""
+MPI_LIB=""
+
+HDF5_INCDIR="-I$HDF5_INC_DIR"
+HDF5_LIBDIR="-L$HDF5_LIB_DIR"
+HDF5_LIB="-lhdf5_hl -lhdf5 -lhdf5 -lz"
+
+OASIS_INCDIR="-I$PWD/../../oasis3-mct/BLD/build/lib/psmile.MPI1"
+OASIS_LIBDIR="-L$PWD/../../oasis3-mct/BLD/lib"
+OASIS_LIB="-lpsmile.MPI1 -lscrip -lmct -lmpeu"
 {% endhighlight %}
 
-To modify the files: `vi arch-X64_PSMN_E5.path` and then:
-
-`NETCDF_INCDIR=""` becomes `NETCDF_INCDIR="-I$NETCDFF_INCDIR -I$NETCDF_INC_DIR"`
-`NETCDF_LIBDIR=""` becomes `NETCDF_LIBDIR="-L$NETCDFF_LIBDIR -L$NETCDF_LIB_DIR"`
-`HDF5_INCDIR=""` becomes `HDF5_INCDIR="-I$HDF5_INC_DIR"`
-`HDF5_LIBDIR=""` becomes `HDF5_LIBDIR="-L$HDF5_LIB_DIR"`
-`HDF5_LIB=""` becomes `HDF5_LIB="-lhdf5_hl -lhdf5 -lhdf5 -lz"`
-
-`vi arch-X64_E5.fcm`:
-
-In `LINKER` line delete `-nofor-main`
-`%BASE_CFLAGS    -diag-disable 1125 -diag-disable 279 -std=c++11` becomes `%BASE_CFLAGS    -w -std=c++11 -D__XIOS_EXCEPTION`
-`%CPP            mpiicc -EP` becomes `%CPP            mpicc -EP`
-
-Then we will create the `arch-X64_PSMN_foss_2023a_E5.env` file:
-`vi arch-X64_PSMN_foss_2023a_E5.env` and then write:
-
+Then, we will create a `.fcm` file:
 {% highlight bash %}
+vi arch-X64_PSMN_E5.fcm
+{% endhighlight %}
+and write:
+{% highlight bash %}
+%CCOMPILER      mpicc
+%FCOMPILER      mpif90
+%LINKER         mpif90
+
+%BASE_CFLAGS    -w -std=c++11 -D__XIOS_EXCEPTION
+%PROD_CFLAGS    -O3 -D BOOST_DISABLE_ASSERTS
+%DEV_CFLAGS     -g -traceback
+%DEBUG_CFLAGS   -DBZ_DEBUG -g -traceback -fno-inline
+
+%BASE_FFLAGS    -D__NONE__
+%PROD_FFLAGS    -O3
+%DEV_FFLAGS     -g -O2 -traceback
+%DEBUG_FFLAGS   -g -traceback
+
+%BASE_INC       -D__NONE__
+%BASE_LD        -lstdc++
+
+%CPP            mpicc -EP
+%FPP            cpp -P
+%MAKE           gmake
+{% endhighlight %}
+
+Finally, we will create a `.env` file:
+{% highlight bash %}
+vi arch-X64_PSMN_E5.env
+{% endhighlight %}
+and then write:
+{% highlight bash %}
+module purge
 module use /applis/PSMN/debian11/E5/modules/all/
 module load netCDF-Fortran/4.6.1-gompi-2023a
 export HDF5_INC_DIR=$HDF5_DIR/include
@@ -71,10 +105,10 @@ export NETCDF_INC_DIR=/applis/PSMN/debian11/E5/software/netCDF/4.9.2-gompi-2023a
 export NETCDF_LIB_DIR=/applis/PSMN/debian11/E5/software/netCDF/4.9.2-gompi-2023a/lib
 {% endhighlight %}
 
-Now we will complie XIOS with the options we just created:
+Now we will compile XIOS with the options we just created:
 {% highlight bash %}
 cd ..
-./make_xios --arch X64_PSMN_foss_2023a_E5
+./make_xios --arch X64_PSMN_E5
 {% endhighlight %}
 
 To test XIOS:
