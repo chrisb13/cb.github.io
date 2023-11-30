@@ -13,7 +13,7 @@ We take the steps of building a regional Ross Sea configuration using NEMO 4.2 o
 
 Pre-requisites:
 
-* [ARCHER account](http://www.archer.ac.uk/access/)
+* [ARCHER account](https://www.archer2.ac.uk/support-access/access.html)
 
 * [Successful compile of NEMO4.2 on ARCHER2](https://cbull.info/nemo4/nemo42-arc2-01/)
 
@@ -23,7 +23,7 @@ Suggested reading:
 
 * [NEMO home page](https://forge.nemo-ocean.eu/nemo/nemo) 
 
-* [Preparing and running NEMO4 on occigen](https://nicojourdain.github.io/students_dir/students_nemo4_occigen/) 
+* [Preparing and running NEMO4 on occigen](https://nicojourdain.github.io/coding_dir/coding_nemo4_occigen/) 
 
 * [NEMO4 ice-shelf fork Pierre Mathiot](https://github.com/pmathiot/NEMOCFG)
 
